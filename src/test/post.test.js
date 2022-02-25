@@ -1,65 +1,53 @@
-const PostRouter = require('../controllers/post')
-/**
-* classe Post
-*/
-class Post {
-  /**
-   * @param  {String} id
-   * @param  {String} title
-   * @param  {String} body
-   * @param  {[String]} tags
-   */
-  constructor (id, title, body, tags) {
-    this.id = id
-    this.title = title
-    this.body = body
-    this.tags = tags
-  }
-}
+const PostRouter = require('../controllers/post/index')
+const PostUseCaseSpy = require('../models/database')
 
-const PostUseCaseSpy = () => {
-  const post = new Post()
-  post.id = '09bb1d8c-4965-4788-94f7-31b151eaba4e'
-  post.title = 'My first Post'
-  post.body = 'Description of my post'
-  post.tags = ['tag1', 'tag2', 'tag3']
-
-  return post
-}
-describe('Post Router', () => {
-  test('Should return 400 if request is provided ', () => {
-    const sut = new PostRouter() // quem quero testar?
-    const httpResponse = sut.getById()
-    expect(httpResponse.statusCode).toBe(400)
+describe('Post Router - Ensure that the route getByID can works correcly', () => {
+  test('Should return 500 if request is provided ', async () => {
+    const sut = new PostRouter()
+    const httpResponse = await sut.getById()
+    expect(httpResponse.statusCode).toBe(500)
   })
-  test('Should return 400 if no ID is provided ', () => {
+  test('Should return 400 if no ID is provided ', async () => {
     const sut = new PostRouter()
     const httpRequest = {
       params: {}
     }
-    const httpResponse = sut.getById(httpRequest)
+    const httpResponse = await sut.getById(httpRequest)
     expect(httpResponse.statusCode).toBe(400)
   })
-  test('Should return 400 if ID is no valid to version 4', () => {
+  test('Should return 400 if ID is no valid UUID to version 4', async () => {
     const sut = new PostRouter()
     const httpRequest = {
       params: {
-        id: 'any_id'
+        id: 'invalid_uuid'
       }
     }
-    const httpResponse = sut.getById(httpRequest)
+    const httpResponse = await sut.getById(httpRequest)
     expect(httpResponse.statusCode).toBe(400)
   })
 
-  test('Should return 200 if ID is valid UUID version 4', () => {
+  test('Should return 404 if ID is valid and register not found', async () => {
+    const sut = new PostRouter()
+    const httpRequest = {
+      params: {
+        id: '3603928c-3785-4338-b5dd-447dca646b21'
+      }
+    }
+    const httpResponse = await sut.getById(httpRequest)
+    await PostUseCaseSpy(httpRequest.params.id)
+    expect(httpResponse.statusCode).toBe(404)
+  })
+
+  test('Should return 200 if ID is valid UUID version 4', async () => {
     const sut = new PostRouter()
     const httpRequest = {
       params: {
         id: '09bb1d8c-4965-4788-94f7-31b151eaba4e'
       }
     }
-    const httpResponse = sut.getById(httpRequest)
+    const httpResponse = await sut.getById(httpRequest)
+    const result = await PostUseCaseSpy(httpRequest.params.id)
     expect(httpResponse.statusCode).toBe(200)
-    expect(httpResponse.body).toEqual(PostUseCaseSpy())
+    expect(httpResponse.body).toEqual(result)
   })
 })
