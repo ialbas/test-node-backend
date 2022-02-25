@@ -1,0 +1,29 @@
+{
+  "name": "node-challenge",
+  "version": "1.0.0",
+  "description": "A simple project example with node and test",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "test:staged": "jest --passWithNoTests",
+    "prepare": "husky install"
+  },
+  "standard": {
+    "env": [
+      "jest"
+    ]
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "homepage": "",
+  "devDependencies": {
+    "husky": "^7.0.4",
+    "jest": "^27.5.1",
+    "lint-staged": "^12.3.4",
+    "standard": "^16.0.4"
+  },
+  "dependencies": {
+    "uuid-validate": "^0.0.3"
+  }
+}
