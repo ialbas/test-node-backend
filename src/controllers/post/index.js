@@ -1,6 +1,7 @@
 const HttpResponse = require('../../presentation/helpers/http-response')
 const validate = require('uuid-validate')
-const PostUseCaseSpy = require('../../models/database/index')
+const PostUseCaseSpy = require('../../models/database/PostUseCaseSpy')
+const PostUseCaseSpyList = require('../../models/database/PostUseCaseSpyList')
 
 class PostRouter {
   /**
@@ -30,9 +31,35 @@ class PostRouter {
       }
       return HttpResponse.ok(result)
     } catch (error) {
+      console.error(error)
+      return HttpResponse.serverError()
+    }
+  }
+
+  async getAll (httpRequest) {
+    try {
+      if (!httpRequest.params.page) {
+        return HttpResponse.badRequest('page')
+      }
+      if (!httpRequest.params.size) {
+        return HttpResponse.badRequest('size')
+      }
+      if (!parseInt(httpRequest.params.page) > 0) {
+        return HttpResponse.badRequest('page')
+      }
+      if (!parseInt(httpRequest.params.size) > 0) {
+        return HttpResponse.badRequest('size')
+      }
+      const result = await PostUseCaseSpyList(httpRequest.params.page, httpRequest.params.size)
+
+      if (!result) {
+        return HttpResponse.notFound('Registro não encontrado.')
+      }
+      return HttpResponse.ok(result)
+    } catch (error) {
+      console.error(error)
       return HttpResponse.serverError()
     }
   }
 }
-
 module.exports = PostRouter
