@@ -16,15 +16,16 @@ class PostRouter {
     this.validate = validate
   }
 
-  async getById (httpRequest) {
+  async getById (id) {
     try {
-      if (!httpRequest.params) {
+      if (!id) {
         return HttpResponse.badRequest('id')
       }
-      if (!validate(httpRequest.params.id, 4)) {
+      if (!validate(id, 4)) {
         return HttpResponse.badRequest('id')
       }
-      const result = await PostUseCaseSpy(httpRequest.params.id)
+      const db = new PostUseCaseSpy()
+      const result = await db.getByIdPost(id)
 
       if (!result) {
         return HttpResponse.notFound('Registro não encontrado.')
@@ -36,26 +37,50 @@ class PostRouter {
     }
   }
 
-  async getAll (httpRequest) {
+  async getAll (page, size) {
     try {
-      if (!httpRequest.params.page) {
+      if (!page && !size) {
+        return HttpResponse.serverError()
+      }
+      if (!page) {
         return HttpResponse.badRequest('page')
       }
-      if (!httpRequest.params.size) {
+      if (!size) {
         return HttpResponse.badRequest('size')
       }
-      if (!parseInt(httpRequest.params.page) > 0) {
+      if (!parseInt(page) > 0) {
         return HttpResponse.badRequest('page')
       }
-      if (!parseInt(httpRequest.params.size) > 0) {
+      if (!parseInt(size) > 0) {
         return HttpResponse.badRequest('size')
       }
-      const result = await PostUseCaseSpyList(httpRequest.params.page, httpRequest.params.size)
+      const result = await PostUseCaseSpyList(page, size)
 
       if (!result) {
         return HttpResponse.notFound('Registro não encontrado.')
       }
       return HttpResponse.ok(result)
+    } catch (error) {
+      console.error(error)
+      return HttpResponse.serverError()
+    }
+  }
+
+  async getRemove (id) {
+    try {
+      if (!id) {
+        return HttpResponse.badRequest('id')
+      }
+      if (!validate(id, 4)) {
+        return HttpResponse.badRequest('id')
+      }
+      const db = new PostUseCaseSpy()
+      const result = await db.getRomovePost(id)
+
+      if (!result) {
+        return HttpResponse.notFound('Registro não encontrado.')
+      }
+      return HttpResponse.noContent()
     } catch (error) {
       console.error(error)
       return HttpResponse.serverError()

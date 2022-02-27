@@ -27,4 +27,10 @@ module.exports = class HttpResponse {
       body
     }
   }
+
+  static noContent () {
+    return {
+      statusCode: 204
+    }
+  }
 }
