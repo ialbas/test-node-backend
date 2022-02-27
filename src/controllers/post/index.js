@@ -1,7 +1,6 @@
 const HttpResponse = require('../../presentation/helpers/http-response')
 const validate = require('uuid-validate')
 const PostUseCaseSpy = require('../../models/database/PostUseCaseSpy')
-const PostUseCaseSpyList = require('../../models/database/PostUseCaseSpyList')
 const postSchema = require('../../models/post/schema')
 const { model } = require('mongoose')
 
@@ -32,7 +31,7 @@ class PostRouter {
       const db = new PostUseCaseSpy()
       const result = await db.createPost(clientPost)
 
-      return { data: result, statusCode: 201 }
+      return HttpResponse.created(result)
     } catch (error) {
       console.error(error)
       return HttpResponse.serverError()
@@ -104,8 +103,8 @@ class PostRouter {
       if (!parseInt(size) > 0) {
         return HttpResponse.badRequest('size')
       }
-      const result = await PostUseCaseSpyList(page, size)
-
+      const db = new PostUseCaseSpy()
+      const result = await db.getAllPost(page, size)
       if (!result) {
         return HttpResponse.notFound('Registro não encontrado.')
       }

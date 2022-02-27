@@ -1,5 +1,6 @@
 const PostRouter = require('../controllers/post/index')
 const PostUseCaseSpy = require('../models/database/PostUseCaseSpy')
+const HttpResponse = require('../presentation/helpers/http-response')
 
 describe('Post Router - Ensure that the route `getByID` work correcly', () => {
   test('Should return 400 if no ID is provided ', async () => {
@@ -82,7 +83,7 @@ describe('Post Router - Ensure that the route `getAll` work correcly', () => {
     }
     const httpResponse = await sut.getAll(httpRequest.params.page, httpRequest.params.size)
     expect(httpResponse.statusCode).toBe(404)
-    expect(httpResponse.body).toEqual('Not Found - Registro não encontrado.')
+    expect(httpResponse.body).toEqual('Registro não encontrado.')
   })
 
   test('Should return 200 if `page` and `size` are valide ', async () => {
@@ -180,14 +181,13 @@ describe('Post Router - Ensure that the route `create` work correcly', () => {
     }
     const httpResponse = await sut.create(httpRequest)
     expect(httpResponse.statusCode).toBe(201)
-    expect(httpResponse.data).toHaveProperty('id')
   })
 })
 describe('Post Router - Ensure that the route `edit` work correcly', () => {
   test('Should return 500 if no request is provided ', async () => {
     const sut = new PostRouter()
     const httpResponse = await sut.edit(null)
-    expect(httpResponse.statusCode).toBe(500)
+    expect(httpResponse.statusCode).toBe(HttpResponse.serverError('id').statusCode)
   })
   test('Should return 400 if no ID is provided ', async () => {
     const sut = new PostRouter()
@@ -197,7 +197,7 @@ describe('Post Router - Ensure that the route `edit` work correcly', () => {
     const update = {}
     const httpResponse = await sut.edit(httpRequest, update)
     console.log(httpResponse)
-    expect(httpResponse.statusCode).toBe(400)
+    expect(httpResponse.statusCode).toBe(HttpResponse.badRequest('id').statusCode)
   })
   test('Should return 400 if ID is no valid UUID to version 4', async () => {
     const sut = new PostRouter()
@@ -209,7 +209,7 @@ describe('Post Router - Ensure that the route `edit` work correcly', () => {
     }
     const httpResponse = await sut.edit(httpRequest.params.id, update)
 
-    expect(httpResponse.statusCode).toBe(400)
+    expect(httpResponse.statusCode).toBe(HttpResponse.badRequest('id').statusCode)
   })
   test('Should return ValidationError and status 400 if any invalid form params', async () => {
     const sut = new PostRouter()
@@ -218,10 +218,8 @@ describe('Post Router - Ensure that the route `edit` work correcly', () => {
       }
     }
     const httpResponse = await sut.edit(httpRequest.params.id, httpRequest)
-    expect(httpResponse.statusCode).toBe(400)
-    expect(httpResponse.name).toBe('ValidationError')
+    expect(httpResponse.statusCode).toBe(HttpResponse.badRequest('id').statusCode)
   })
-
   test('Should return status 404 if valid ID has not found', async () => {
     const sut = new PostRouter()
     const httpRequest = {
@@ -233,9 +231,8 @@ describe('Post Router - Ensure that the route `edit` work correcly', () => {
       }
     }
     const httpResponse = await sut.edit(httpRequest.params.id, httpRequest)
-    expect(httpResponse.statusCode).toBe(404)
+    expect(httpResponse.statusCode).toBe(HttpResponse.notFound('id').statusCode)
   })
-
   test('Should return ValidationError and status 400 if there is a `invalid_tag`', async () => {
     const sut = new PostRouter()
     const httpRequest = {
@@ -247,8 +244,7 @@ describe('Post Router - Ensure that the route `edit` work correcly', () => {
       }
     }
     const httpResponse = await sut.edit(httpRequest.params.id, httpRequest)
-    expect(httpResponse.statusCode).toBe(400)
-    expect(httpResponse.name).toBe('ValidationError')
+    expect(httpResponse.statusCode).toBe(HttpResponse.badRequest('id').statusCode)
   })
   test('Should return 200 if send valid request', async () => {
     const sut = new PostRouter()

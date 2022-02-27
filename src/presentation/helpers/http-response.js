@@ -3,19 +3,23 @@ const MissingParamError = require('./missing-param-error')
 module.exports = class HttpResponse {
   static serverError () {
     return {
-      statusCode: 500
+      name: '500 Internal Server Error',
+      statusCode: 500,
+      body: null
     }
   }
 
   static notFound (paramName) {
     return {
+      name: '404 Not Found',
       statusCode: 404,
-      body: `Not Found - ${paramName}`
+      body: paramName
     }
   }
 
   static badRequest (paramName) {
     return {
+      name: '400 Bad Request',
       statusCode: 400,
       body: new MissingParamError(paramName)
     }
@@ -23,14 +27,25 @@ module.exports = class HttpResponse {
 
   static ok (body) {
     return {
+      name: '200 Ok',
       statusCode: 200,
+      body
+    }
+  }
+
+  static created (body) {
+    return {
+      name: '201 Created',
+      statusCode: 201,
       body
     }
   }
 
   static noContent () {
     return {
-      statusCode: 204
+      name: '204 No Content',
+      statusCode: 204,
+      body: null
     }
   }
 }
