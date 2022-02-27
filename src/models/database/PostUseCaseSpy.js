@@ -17,6 +17,17 @@ class Post {
 }
 
 class PostUseCase {
+  async createPost (newPost) {
+    const post = new Post()
+
+    post.id = '09bb1d8c-4965-4788-94f7-31b151eaba4e'
+    post.title = newPost.title
+    post.body = newPost.body
+    post.tags = newPost.tags
+
+    return await post
+  }
+
   async getByIdPost (id) {
     const post = new Post()
     post.id = '09bb1d8c-4965-4788-94f7-31b151eaba4e'

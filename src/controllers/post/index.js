@@ -2,6 +2,8 @@ const HttpResponse = require('../../presentation/helpers/http-response')
 const validate = require('uuid-validate')
 const PostUseCaseSpy = require('../../models/database/PostUseCaseSpy')
 const PostUseCaseSpyList = require('../../models/database/PostUseCaseSpyList')
+const postSchema = require('../../models/post/schema')
+const { model } = require('mongoose')
 
 class PostRouter {
   /**
@@ -14,6 +16,28 @@ class PostRouter {
   constructor ({ postUseCase, validate } = {}) {
     this.postUseCase = postUseCase
     this.validate = validate
+  }
+
+  async create (httpRequest) {
+    try {
+      const { params } = httpRequest
+      const PostModel = model('Post', postSchema)
+      const clientPost = new PostModel(params)
+      const error = clientPost.validateSync()
+
+      if (error) {
+        console.error(error)
+        const { name, message } = error
+        return { name, message, statusCode: 400 }
+      }
+      const db = new PostUseCaseSpy()
+      const result = await db.createPost(clientPost)
+
+      return { data: result, statusCode: 201 }
+    } catch (error) {
+      console.error(error)
+      return HttpResponse.serverError()
+    }
   }
 
   async getById (id) {
