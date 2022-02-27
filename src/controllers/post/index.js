@@ -26,7 +26,6 @@ class PostRouter {
       const error = clientPost.validateSync()
 
       if (error) {
-        console.error(error)
         const { name, message } = error
         return { name, message, statusCode: 400 }
       }
@@ -34,6 +33,33 @@ class PostRouter {
       const result = await db.createPost(clientPost)
 
       return { data: result, statusCode: 201 }
+    } catch (error) {
+      console.error(error)
+      return HttpResponse.serverError()
+    }
+  }
+
+  async edit (id, httpRequest) {
+    try {
+      const update = httpRequest.params
+      const PostModel = model('Post', postSchema)
+      const clientPost = new PostModel(update)
+      const error = clientPost.validateSync()
+
+      if (error) {
+        const { name, message } = error
+        return { name, message, statusCode: 400 }
+      }
+      if (!validate(id, 4)) {
+        return HttpResponse.badRequest('id')
+      }
+
+      const db = new PostUseCaseSpy()
+      const result = await db.editPost(id, clientPost)
+      if (!result) {
+        return HttpResponse.notFound('Registro não encontrado.')
+      }
+      return HttpResponse.ok(result)
     } catch (error) {
       console.error(error)
       return HttpResponse.serverError()
