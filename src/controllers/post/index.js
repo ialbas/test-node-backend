@@ -33,7 +33,6 @@ class PostRouter {
 
       return HttpResponse.created(result)
     } catch (error) {
-      console.error(error)
       return HttpResponse.serverError()
     }
   }
@@ -60,7 +59,6 @@ class PostRouter {
       }
       return HttpResponse.ok(result)
     } catch (error) {
-      console.error(error)
       return HttpResponse.serverError()
     }
   }
@@ -81,7 +79,6 @@ class PostRouter {
       }
       return HttpResponse.ok(result)
     } catch (error) {
-      console.error(error)
       return HttpResponse.serverError()
     }
   }
@@ -110,7 +107,6 @@ class PostRouter {
       }
       return HttpResponse.ok(result)
     } catch (error) {
-      console.error(error)
       return HttpResponse.serverError()
     }
   }
@@ -131,7 +127,6 @@ class PostRouter {
       }
       return HttpResponse.noContent()
     } catch (error) {
-      console.error(error)
       return HttpResponse.serverError()
     }
   }

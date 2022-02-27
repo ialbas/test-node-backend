@@ -98,13 +98,13 @@ describe('Post Router - Ensure that the route `getAll` work correcly', () => {
     expect(httpResponse.statusCode).toBe(200)
   })
 })
-describe('Post Router - Ensure that the route `removeById` work correcly', () => {
+describe('Post Router - Ensure that the route `remove` work correcly', () => {
   test('Should return 400 if no ID is provided ', async () => {
     const sut = new PostRouter()
     const httpRequest = {
       params: {}
     }
-    const httpResponse = await sut.getById(httpRequest)
+    const httpResponse = await sut.getRemove(httpRequest)
     expect(httpResponse.statusCode).toBe(400)
   })
   test('Should return 400 if ID is no valid UUID to version 4', async () => {
@@ -114,7 +114,7 @@ describe('Post Router - Ensure that the route `removeById` work correcly', () =>
         id: 'invalid_uuid'
       }
     }
-    const httpResponse = await sut.getById(httpRequest)
+    const httpResponse = await sut.getRemove(httpRequest)
     expect(httpResponse.statusCode).toBe(400)
   })
 
@@ -125,7 +125,7 @@ describe('Post Router - Ensure that the route `removeById` work correcly', () =>
         id: '3603928c-3785-4338-b5dd-447dca646b21'
       }
     }
-    const httpResponse = await sut.getById(httpRequest.params.id)
+    const httpResponse = await sut.getRemove(httpRequest.params.id)
     expect(httpResponse.statusCode).toBe(404)
   })
 
@@ -196,7 +196,6 @@ describe('Post Router - Ensure that the route `edit` work correcly', () => {
     }
     const update = {}
     const httpResponse = await sut.edit(httpRequest, update)
-    console.log(httpResponse)
     expect(httpResponse.statusCode).toBe(HttpResponse.badRequest('id').statusCode)
   })
   test('Should return 400 if ID is no valid UUID to version 4', async () => {
