@@ -1,6 +1,6 @@
-const PostRouter = require('../controllers/post/index')
-const PostUseCaseSpy = require('../models/database/PostUseCaseSpy')
-const HttpResponse = require('../presentation/helpers/http-response')
+const PostRouter = require('./index')
+const PostUseCaseSpy = require('../../models/database/PostUseCaseSpy')
+const HttpResponse = require('../../helpers/http-response')
 
 describe('Post Router - Ensure that the route `getByID` work correcly', () => {
   test('Should return 400 if no ID is provided ', async () => {

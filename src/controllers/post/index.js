@@ -1,8 +1,9 @@
-const HttpResponse = require('../../presentation/helpers/http-response')
 const validate = require('uuid-validate')
+const { model } = require('mongoose')
+
+const HttpResponse = require('../../helpers/http-response')
 const PostUseCaseSpy = require('../../models/database/PostUseCaseSpy')
 const postSchema = require('../../models/post/schema')
-const { model } = require('mongoose')
 
 class PostRouter {
   /**
@@ -17,6 +18,13 @@ class PostRouter {
     this.validate = validate
   }
 
+  /**
+   * @name Post.create
+   * @api {post} /api/post
+   * @description Create a new post
+   * @param {Express<http>} httpRequest request
+   * @returns {object} new a registrer { id: UUID, title: string, body: string, tags: string[] }
+   */
   async create (httpRequest) {
     try {
       const { params } = httpRequest
@@ -37,6 +45,14 @@ class PostRouter {
     }
   }
 
+  /**
+   * @name Post.update
+   * @api {put} /api/post/:id
+   * @description Update a post by id
+   * @param {string} id a valid UUID version 4
+   * @param {Express<http>} httpRequest request
+   * @returns {object} new a registrer {{ id: UUID, title: string, body: string, tags: string[] }}
+   */
   async edit (id, httpRequest) {
     try {
       const update = httpRequest.params
@@ -63,6 +79,13 @@ class PostRouter {
     }
   }
 
+  /**
+   * @name Post.getByID
+   * @api {get} /api/post/:id
+   * @description Get post by ID
+   * @param {string} id UUID version 4
+   * @returns {object} {{ id: UUID, title: string, body: string, tags: string[] }}
+   */
   async getById (id) {
     try {
       if (!id) {
@@ -83,6 +106,14 @@ class PostRouter {
     }
   }
 
+  /**
+   * @name Post.getAll
+   * @api {get} /api/post?page=1&size=5
+   * @description Get all Post with pagination
+   * @param {string} page
+   * @param {string} size
+   * @returns list of Post [{ id: UUID, title: string, body: string, tags: string[] }]
+   */
   async getAll (page, size) {
     try {
       if (!page && !size) {
@@ -111,6 +142,13 @@ class PostRouter {
     }
   }
 
+  /**
+   * @name Post.getRemove
+   * @api {delete} /api/post/:id
+   * @description Remove a post by ID
+   * @param {string} id a valid UUID verion 4
+   * @returns no content after remove a post
+   */
   async getRemove (id) {
     try {
       if (!id) {
