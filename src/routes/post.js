@@ -5,10 +5,7 @@ const Post = require('../controllers/post/index')
 
 // Post Routes
 const PostController = new Post()
-routes.get(
-  '/:id',
-  async (req, res) => await res.send({ ola: 'mundo', id: req.params.id })
-)
+
 routes.post('/api/posts', PostController.create)
 routes.get('/api/posts', PostController.getAll)
 routes.get('/api/posts/:id', PostController.getById)

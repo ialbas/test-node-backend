@@ -1,7 +1,9 @@
 const Post = require('../controllers/post')
+const Auth = require('../controllers/auth')
 
 // Post Routes
 const PostController = new Post()
+const AuthController = new Auth()
 
 class Handler {
   async HandlerGetByID (req, res) {
@@ -29,6 +31,15 @@ class Handler {
 
   async HandlerUpdate (req, res) {
     const httpResponse = await PostController.update(req.body)
+    res.status(httpResponse.statusCode).json(httpResponse)
+  }
+
+  async HandlerLogin (req, res) {
+    const httpResponse = await AuthController.auth(
+      req.body.email,
+      req.body.password
+    )
+
     res.status(httpResponse.statusCode).json(httpResponse)
   }
 }

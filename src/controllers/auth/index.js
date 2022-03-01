@@ -1,4 +1,3 @@
-const MissingParamError = require('../../helpers/missing-param-error')
 const HttpResponse = require('../../helpers/http-response')
 const Encripter = require('../../helpers/encrypter')
 const TokenGenerator = require('../../helpers/token-generator')
@@ -9,14 +8,10 @@ const ENV_SECRET = 'env_my_secret';
 class AuthRouter {
   async auth (email, password) {
     if (!email) {
-      throw new MissingParamError('email')
+      return HttpResponse.badRequest('email')
     }
     if (!password) {
-      throw new MissingParamError('password')
-    }
-
-    if (!email) {
-      throw new MissingParamError('email')
+      return HttpResponse.badRequest('password')
     }
     const usr = new User()
     const user = await usr.getUserByEmail(email)
@@ -28,7 +23,7 @@ class AuthRouter {
       const accessToken = await tokenGenerator.generate(user._id)
       return HttpResponse.ok({ accessToken: accessToken })
     }
-    return HttpResponse.unauthorized('Usuário não autorizado.')
+    return HttpResponse.unauthorized('user unauthorized.')
   }
 }
 

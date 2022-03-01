@@ -64,26 +64,25 @@ const makeSut = () => {
 describe('Auth Router - Ensure that the route `login` work correcly', () => {
   test('Should throw if no `email` is provided', async () => {
     const { sut } = makeSut()
-    const promise = sut.auth()
-    expect(promise).rejects.toThrow(new MissingParamError('email'))
+    const auth = await sut.auth()
+    expect(auth.statusCode).toBe(400)
   })
 
   test('Should throw if no `password` is provided', async () => {
     const { sut } = makeSut()
-    const promise = sut.auth('any_email@mail.com')
-    expect(promise).rejects.toThrow(new MissingParamError('password'))
+    const auth = await sut.auth('any_email@mail.com')
+    expect(auth.statusCode).toBe(400)
   })
 
   test('Should return 401 if email id invalid', async () => {
     const { sut } = makeSut()
-    const user = await makeUsers()
-    const auth = await sut.auth('outher_email@gmail.com', user.password)
+    const auth = await sut.auth('outher_email@gmail.com', 'any_password')
     expect(auth.statusCode).toBe(401)
   })
-  test('Should return 401 if password id invalid', async () => {
+  test('Should return 401 if password is invalid', async () => {
     const { sut } = makeSut()
     const user = await makeUsers()
-    const auth = await sut.auth(user.email, 'outher_password')
+    const auth = await sut.auth(user.email, 'invalid_password')
     expect(auth.statusCode).toBe(401)
   })
 
