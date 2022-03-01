@@ -3,57 +3,57 @@ const MissingParamError = require('./missing-param-error')
 module.exports = class HttpResponse {
   static serverError () {
     return {
-      name: '500 Internal Server Error',
+      name: 'internal server error',
       statusCode: 500,
-      body: null
+      data: null
     }
   }
 
   static notFound (paramName) {
     return {
-      name: '404 Not Found',
+      name: 'not found',
       statusCode: 404,
-      body: paramName
+      data: paramName
     }
   }
 
   static unauthorized (paramName) {
     return {
-      name: '401 Unauthorized',
+      name: 'unauthorized',
       statusCode: 401,
-      body: paramName
+      data: paramName
     }
   }
 
   static badRequest (paramName) {
     return {
-      name: '400 Bad Request',
+      name: 'bad request',
       statusCode: 400,
-      body: new MissingParamError(paramName)
+      data: new MissingParamError(paramName)
     }
   }
 
-  static ok (body) {
+  static ok (data) {
     return {
-      name: '200 Ok',
+      name: 'ok',
       statusCode: 200,
-      body
+      data
     }
   }
 
-  static created (body) {
+  static created (data) {
     return {
-      name: '201 Created',
+      name: 'created',
       statusCode: 201,
-      body
+      data
     }
   }
 
   static noContent () {
     return {
-      name: '204 No Content',
+      name: 'no contet',
       statusCode: 204,
-      body: null
+      data: null
     }
   }
 }

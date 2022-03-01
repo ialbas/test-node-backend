@@ -4,6 +4,8 @@
   "description": "A simple project example with node and test",
   "main": "index.js",
   "scripts": {
+    "start": "node ./src/app.js",
+    "local": "nodemon ./src/app.js",
     "test": "jest --passWithNoTests --colors",
     "test:watch": "npm test -- --watch",
     "test:staged": "jest --passWithNoTests",
@@ -23,6 +25,7 @@
     "husky": "^7.0.4",
     "jest": "^27.5.1",
     "lint-staged": "^12.3.4",
+    "nodemon": "^2.0.15",
     "standard": "^16.0.4"
   },
   "dependencies": {

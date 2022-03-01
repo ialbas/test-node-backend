@@ -20,7 +20,7 @@ class PostUseCase {
   async createPost (newPost) {
     const post = new Post()
 
-    post.id = '09bb1d8c-4965-4788-94f7-31b151eaba4e'
+    post.id = '09bb1d8c-4965-4788-94f7-31b151eaba4e';
     post.title = newPost.title
     post.body = newPost.body
     post.tags = newPost.tags
@@ -31,7 +31,7 @@ class PostUseCase {
   async editPost (id, newPost) {
     const post = new Post()
 
-    post.id = '09bb1d8c-4965-4788-94f7-31b151eaba4e'
+    post.id = '09bb1d8c-4965-4788-94f7-31b151eaba4e';
     post.title = newPost.title
     post.body = newPost.body
     post.tags = newPost.tags
@@ -42,12 +42,19 @@ class PostUseCase {
 
   async getByIdPost (id) {
     const post = new Post()
-    post.id = '09bb1d8c-4965-4788-94f7-31b151eaba4e'
-    post.title = 'My first Post'
-    post.body = 'Description of my post'
+    post.id = '09bb1d8c-4965-4788-94f7-31b151eaba4e';
+    post.title = 'My first Post';
+    post.body = 'Description of my post';
     post.tags = ['tag1', 'tag2', 'tag3']
 
-    if (id === post.id) return await post
+    if (id === post.id) {
+      return await {
+        id: post.id,
+        title: post.title,
+        body: post.body,
+        tags: post.tags
+      }
+    }
     return null
   }
 
@@ -56,20 +63,20 @@ class PostUseCase {
     const post1 = new Post()
     const result = []
 
-    post.id = '09bb1d8c-4965-4788-94f7-31b151eaba4e'
-    post.title = 'My first Post'
-    post.body = 'Description of my post'
+    post.id = '09bb1d8c-4965-4788-94f7-31b151eaba4e';
+    post.title = 'My first Post';
+    post.body = 'Description of my post';
     post.tags = ['tag1', 'tag2', 'tag3']
 
     result.push(post)
 
-    post1.id = '09bb1d8c-4965-4788-94f7-31b151eaba4e'
-    post1.title = 'My first Post'
-    post1.body = 'Description of my post'
+    post1.id = '09bb1d8c-4965-4788-94f7-31b151eaba4e';
+    post1.title = 'My first Post';
+    post1.body = 'Description of my post';
     post1.tags = ['tag1', 'tag2', 'tag3']
 
     result.push(post1)
-    if (page === 1 && size === 5) return await result
+    if (parseInt(page) === 1 && parseInt(size) === 5) return await result
     return null
   }
 

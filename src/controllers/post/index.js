@@ -7,29 +7,16 @@ const postSchema = require('../../models/post/schema')
 
 class PostRouter {
   /**
-   * @name Post.getByID
-   * @api {get} /api/post/:id
-   * @description Get post by ID
-   * @param {string} id UUID version 4
-   * @returns {object} {{ id: UUID, title: string, body: string, tags: string[] }}
-   */
-  constructor ({ postUseCase, validate } = {}) {
-    this.postUseCase = postUseCase
-    this.validate = validate
-  }
-
-  /**
    * @name Post.create
    * @api {post} /api/post
    * @description Create a new post
    * @param {Express<http>} httpRequest request
    * @returns {object} new a registrer { id: UUID, title: string, body: string, tags: string[] }
    */
-  async create (httpRequest) {
+  async create (body) {
     try {
-      const { params } = httpRequest
       const PostModel = model('Post', postSchema)
-      const clientPost = new PostModel(params)
+      const clientPost = new PostModel(body)
       const error = clientPost.validateSync()
 
       if (error) {
@@ -53,11 +40,10 @@ class PostRouter {
    * @param {Express<http>} httpRequest request
    * @returns {object} new a registrer {{ id: UUID, title: string, body: string, tags: string[] }}
    */
-  async edit (id, httpRequest) {
+  async update (id, body) {
     try {
-      const update = httpRequest.params
       const PostModel = model('Post', postSchema)
-      const clientPost = new PostModel(update)
+      const clientPost = new PostModel(body)
       const error = clientPost.validateSync()
 
       if (error) {
@@ -132,24 +118,25 @@ class PostRouter {
         return HttpResponse.badRequest('size')
       }
       const db = new PostUseCaseSpy()
-      const result = await db.getAllPost(page, size)
+      const result = await db.getAllPost(parseInt(page), parseInt(size))
       if (!result) {
         return HttpResponse.notFound('Registro não encontrado.')
       }
       return HttpResponse.ok(result)
     } catch (error) {
+      console.error(error)
       return HttpResponse.serverError()
     }
   }
 
   /**
-   * @name Post.getRemove
+   * @name Post.remove
    * @api {delete} /api/post/:id
    * @description Remove a post by ID
    * @param {string} id a valid UUID verion 4
    * @returns no content after remove a post
    */
-  async getRemove (id) {
+  async remove (id) {
     try {
       if (!id) {
         return HttpResponse.badRequest('id')

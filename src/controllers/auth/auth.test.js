@@ -94,6 +94,6 @@ describe('Auth Router - Ensure that the route `login` work correcly', () => {
     const tokenGenerator = new TokenGenerator(ENV_SECRET)
     const validToken = await tokenGenerator.generate(user._id)
     expect(accessToken).not.toBeNull()
-    expect(accessToken.body.accessToken).toBe(validToken)
+    expect(accessToken.data.accessToken).toBe(validToken)
   })
 })
