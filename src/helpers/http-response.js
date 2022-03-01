@@ -17,6 +17,14 @@ module.exports = class HttpResponse {
     }
   }
 
+  static unauthorized (paramName) {
+    return {
+      name: '401 Unauthorized',
+      statusCode: 401,
+      body: paramName
+    }
+  }
+
   static badRequest (paramName) {
     return {
       name: '400 Bad Request',
