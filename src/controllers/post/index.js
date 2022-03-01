@@ -23,6 +23,10 @@ class PostRouter {
         const { name, message } = error
         return { name, message, statusCode: 400 }
       }
+      /*
+      const db = new PostUseCaseSpy()
+      const result = await db.createPost(clientPost)
+      */
       const db = new PostUseCaseSpy()
       const result = await db.createPost(clientPost)
 

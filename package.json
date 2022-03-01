@@ -21,12 +21,6 @@
   "author": "",
   "license": "ISC",
   "homepage": "",
-  "devDependencies": {
-    "husky": "^7.0.4",
-    "jest": "^27.5.1",
-    "lint-staged": "^12.3.4",
-    "standard": "^16.0.4"
-  },
   "dependencies": {
     "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
@@ -34,8 +28,16 @@
     "express": "^4.17.3",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.2.2",
+    "mongoose-paginate": "^5.0.3",
     "uuid": "^8.3.2",
     "uuid-validate": "^0.0.3",
     "validator": "^13.7.0"
+  },
+  "devDependencies": {
+    "husky": "^7.0.4",
+    "jest": "^27.5.1",
+    "lint-staged": "^12.3.4",
+    "nodemon": "^2.0.15",
+    "standard": "^16.0.4"
   }
 }

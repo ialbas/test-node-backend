@@ -26,10 +26,7 @@ const postSchema = new Schema({
       ],
       message: 'the value `{VALUE}` is not supported.'
     },
-    required: [
-      true,
-      "the field `tags` don't contain any of these words: "
-    ]
+    required: [true, "the field `tags` don't contain any of these words: "]
   }
 })
 
