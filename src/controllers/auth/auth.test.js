@@ -18,16 +18,18 @@ class AuthRouter {
     const usr = new User()
     const user = await usr.getUserByEmail(email)
     const encripter = new Encripter()
-    const isValid = user && await encripter.compare(password, user.password)
+    const isValid = user && (await encripter.compare(password, user.password))
 
     if (isValid) {
-      const tokenGenerator = new TokenGenerator('env_my_secret')
+      const tokenGenerator = new TokenGenerator(ENV_SECRET)
       const accessToken = await tokenGenerator.generate(user._id)
-      return accessToken
+      return HttpResponse.ok({ accessToken: accessToken })
     }
     return HttpResponse.unauthorized('Usuário não autorizado.')
   }
 }
+
+const ENV_SECRET = 'env_my_secret';
 
 const loadedCredencials = {
   _id: '3603928c-3785-4338-b5dd-447dca646b21',
@@ -51,9 +53,9 @@ const makeTokenGenerator = () => {
     }
   }
   const tokenGeneratorSpy = new TokenGeneratorSpy()
-  tokenGeneratorSpy.accessToken = '3603928c-3785-4338-b5dd-447dca646b21'
+  tokenGeneratorSpy.accessToken = '3603928c-3785-4338-b5dd-447dca646b21';
   return tokenGeneratorSpy
-}
+};
 const makeEncrypter = () => {
   class EncrypterSpy {
     async compare (password, hashedPassword) {
@@ -65,13 +67,13 @@ const makeEncrypter = () => {
   const encrypterSpy = new EncrypterSpy()
   encrypterSpy.isValid = true
   return encrypterSpy
-}
+};
 
 const makeUsers = async () => {
   const user = new User()
   const usr = await user.getUserByEmail(loadedCredencials.email)
   return usr
-}
+};
 
 const makeSut = () => {
   const sut = new AuthRouter()
@@ -84,7 +86,7 @@ const makeSut = () => {
     encrypterSpy,
     tokenGeneratorSpy
   }
-}
+};
 
 describe('Auth Router - Ensure that the route `login` work correcly', () => {
   test('Should throw if no `email` is provided', async () => {
@@ -116,7 +118,9 @@ describe('Auth Router - Ensure that the route `login` work correcly', () => {
     const { sut } = makeSut()
     const user = await makeUsers()
     const accessToken = await sut.auth(user.email, 'any_password')
-
+    const tokenGenerator = new TokenGenerator(ENV_SECRET)
+    const validToken = await tokenGenerator.generate(user._id)
     expect(accessToken).not.toBeNull()
+    expect(accessToken.body.accessToken).toBe(validToken)
   })
 })
