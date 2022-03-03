@@ -1,5 +1,5 @@
 const { MongoMemoryServer } = require('mongodb-memory-server')
-const { MongoClient } = require('mongodb')
+const MongoHelper = require('./mongoHelper')
 
 describe('Single MongoMemoryServer', () => {
   let connection
@@ -8,24 +8,21 @@ describe('Single MongoMemoryServer', () => {
 
   beforeAll(async () => {
     mongoServer = await MongoMemoryServer.create()
-    connection = await MongoClient.connect(mongoServer.getUri(), {
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-    })
-    db = await connection.db()
+    await MongoHelper.connect(mongoServer.getUri())
+    db = await MongoHelper.getCollection('posts')
   })
   afterAll(async () => {
-    await connection.close()
+    await MongoHelper.disconnect()
     if (connection) {
       await mongoServer.stop()
     }
   })
 
   beforeEach(async () => {
-    await db.collection('posts').deleteMany
+    await db.deleteMany
   })
-  it('should insert a doc into collection', async () => {
-    const posts = db.collection('posts')
+  it('should insert a doc into collection Post', async () => {
+    const posts = db
 
     const mockPost = {
       _id: 'some-user-id',
@@ -36,7 +33,6 @@ describe('Single MongoMemoryServer', () => {
     await posts.insertOne(mockPost)
 
     const insertedPost = await posts.findOne({ _id: 'some-user-id' })
-
     expect(insertedPost).toEqual(mockPost)
   })
 })
