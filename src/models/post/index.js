@@ -26,7 +26,7 @@ class PostDB {
     try {
       if (post) {
         const result = await post.save()
-        return HttpResponse.ok(result)
+        return result
       }
     } catch (e) {
       console.error(e)

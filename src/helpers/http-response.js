@@ -1,11 +1,12 @@
 const MissingParamError = require('./missing-param-error')
+const UnsupportedParamError = require('./unsupported-param')
 
 module.exports = class HttpResponse {
   static serverError () {
     return {
       name: 'internal server error',
       statusCode: 500,
-      data: null
+      error: 'unexpected error'
     }
   }
 
@@ -13,7 +14,7 @@ module.exports = class HttpResponse {
     return {
       name: 'not found',
       statusCode: 404,
-      data: paramName
+      error: paramName
     }
   }
 
@@ -21,7 +22,7 @@ module.exports = class HttpResponse {
     return {
       name: 'unauthorized',
       statusCode: 401,
-      data: paramName
+      error: paramName
     }
   }
 
@@ -29,7 +30,15 @@ module.exports = class HttpResponse {
     return {
       name: 'bad request',
       statusCode: 400,
-      data: new MissingParamError(paramName)
+      error: new MissingParamError(paramName)
+    }
+  }
+
+  static badRequestParam (paramName) {
+    return {
+      name: 'bad request',
+      statusCode: 400,
+      error: new UnsupportedParamError(paramName)
     }
   }
 

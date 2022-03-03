@@ -1,6 +1,6 @@
 const validate = require('uuid-validate')
 const { model } = require('mongoose')
-
+// const PostDB = require('../../models/post/index')
 const HttpResponse = require('../../helpers/http-response')
 const PostUseCaseSpy = require('../../models/database/PostUseCaseSpy')
 const postSchema = require('../../models/post/schema')
@@ -20,13 +20,15 @@ class PostRouter {
       const error = clientPost.validateSync()
 
       if (error) {
-        const { name, message } = error
-        return { name, message, statusCode: 400 }
+        const { message } = error
+        return HttpResponse.badRequestParam(message)
       }
+      // producion db
       /*
-      const db = new PostUseCaseSpy()
-      const result = await db.createPost(clientPost)
-      */
+      const db = new PostDB()
+      const result = await db.create(clientPost)
+*/
+
       const db = new PostUseCaseSpy()
       const result = await db.createPost(clientPost)
 
