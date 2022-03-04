@@ -1,9 +1,29 @@
 const validate = require('uuid-validate')
 const { model } = require('mongoose')
-// const PostDB = require('../../models/post/index')
+const PostDB = require('../../models/post/index')
 const HttpResponse = require('../../helpers/http-response')
 const PostUseCaseSpy = require('../../models/database/PostUseCaseSpy')
 const postSchema = require('../../models/post/schema')
+
+const validateBody = (body) => {
+  const PostModel = model('Post', postSchema)
+  const clientPost = new PostModel(body)
+  const error = clientPost.validateSync()
+
+  const result = {
+    isValid: true,
+    error: null,
+    client: clientPost
+  }
+
+  if (error) {
+    const { message } = error
+    result.isValid = false
+    result.error = HttpResponse.badRequestParam(message)
+  }
+
+  return result
+};
 
 class PostRouter {
   /**
@@ -15,24 +35,20 @@ class PostRouter {
    */
   async create (body) {
     try {
-      const PostModel = model('Post', postSchema)
-      const clientPost = new PostModel(body)
-      const error = clientPost.validateSync()
+      const validator = validateBody(body)
 
-      if (error) {
-        const { message } = error
-        return HttpResponse.badRequestParam(message)
+      if (validator.error) {
+        return validator.error
       }
-      // producion db
-      /*
-      const db = new PostDB()
-      const result = await db.create(clientPost)
-*/
 
-      const db = new PostUseCaseSpy()
-      const result = await db.createPost(clientPost)
+      if (validator.isValid) {
+        // producion db
+        const db = new PostDB()
+        const result = await db.create(validator.client)
+        return HttpResponse.created(result)
+      }
 
-      return HttpResponse.created(result)
+      return HttpResponse.serverError()
     } catch (error) {
       return HttpResponse.serverError()
     }

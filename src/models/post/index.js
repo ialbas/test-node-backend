@@ -22,7 +22,6 @@ class PostDB {
   */
   async create (post) {
     postSchema.options = { id: false }
-
     try {
       if (post) {
         const result = await post.save()
