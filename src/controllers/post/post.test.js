@@ -164,7 +164,7 @@ describe('Post Router - Ensure that the route `create` work correcly', () => {
     expect(httpResponse.statusCode).toBe(400)
   })
 
-  test.only('Should return ValidationError and status 400 if there is a `invalid_tag`', async () => {
+  test('Should return ValidationError and status 400 if there is a `invalid_tag`', async () => {
     const sut = new PostRouter()
     const httpRequest = {
       params: {
@@ -237,11 +237,11 @@ describe('Post Router - Ensure that the route `update` work correcly', () => {
       HttpResponse.badRequest('id').statusCode
     )
   })
-  test('Should return status 404 if valid ID has not found', async () => {
+  test.only('Should return status 404 if valid ID has not found', async () => {
     const sut = new PostRouter()
     const id = '3603928c-3785-4338-b5dd-447dca646b21';
     const httpRequest = {
-      title: 'any_title',
+      title: 'any_title_if_400',
       body: 'any_body, some_body',
       tags: ['valid_tag_one', 'valid_tag_two']
     }

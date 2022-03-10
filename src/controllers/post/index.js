@@ -1,12 +1,12 @@
 const validate = require('uuid-validate')
-const { model } = require('mongoose')
+const db = require('../../models/database/mongodb-connection')
 const PostDB = require('../../models/post/index')
 const HttpResponse = require('../../helpers/http-response')
 const PostUseCaseSpy = require('../../models/database/PostUseCaseSpy')
 const postSchema = require('../../models/post/schema')
 
 const validateBody = (body) => {
-  const PostModel = model('Post', postSchema)
+  const PostModel = db.model('Post', postSchema)
   const clientPost = new PostModel(body)
   const error = clientPost.validateSync()
 
@@ -43,8 +43,8 @@ class PostRouter {
 
       if (validator.isValid) {
         // producion db
-        const db = new PostDB()
-        const result = await db.create(validator.client)
+        const model = new PostDB()
+        const result = await model.create(validator.client)
         return HttpResponse.created(result)
       }
 
@@ -64,24 +64,23 @@ class PostRouter {
    */
   async update (id, body) {
     try {
-      const PostModel = model('Post', postSchema)
-      const clientPost = new PostModel(body)
-      const error = clientPost.validateSync()
-
-      if (error) {
-        const { name, message } = error
-        return { name, message, statusCode: 400 }
-      }
       if (!validate(id, 4)) {
-        return HttpResponse.badRequest('id')
+        return HttpResponse.badRequestParam('id')
+      }
+      const validator = validateBody(body)
+
+      if (validator.error) {
+        return validator.error
       }
 
-      const db = new PostUseCaseSpy()
-      const result = await db.editPost(id, clientPost)
-      if (!result) {
-        return HttpResponse.notFound('Registro não encontrado.')
+      if (validator.isValid) {
+        // producion model
+        const model = new PostDB()
+        const result = await model.update(id, validator.client)
+        return HttpResponse.ok(result)
       }
-      return HttpResponse.ok(result)
+
+      return HttpResponse.serverError()
     } catch (error) {
       return HttpResponse.serverError()
     }

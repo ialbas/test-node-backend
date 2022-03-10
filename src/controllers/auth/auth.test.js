@@ -1,4 +1,4 @@
-const MissingParamError = require('../../helpers/missing-param-error')
+//const MissingParamError = require('../../helpers/missing-param-error')
 const TokenGenerator = require('../../helpers/token-generator')
 const AuthRouter = require('../auth/index')
 
