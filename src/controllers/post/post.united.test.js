@@ -2,6 +2,9 @@ const PostRouter = require('./index')
 const PostUseCaseSpy = require('../../models/database/PostUseCaseSpy')
 const HttpResponse = require('../../helpers/http-response')
 
+const { MongoMemoryServer } = require('mongodb-memory-server')
+const MongoHelper = require('../../models/database/mongoHelper')
+/*
 describe('Post Router - Ensure that the route `getByID` work correcly', () => {
   test('Should return 400 if no ID is provided ', async () => {
     const sut = new PostRouter()
@@ -149,58 +152,6 @@ describe('Post Router - Ensure that the route `remove` work correcly', () => {
     expect(httpResponse.statusCode).toBe(204)
   })
 })
-describe('Post Router - Ensure that the route `create` work correcly', () => {
-  test('Should return 500 if no request is provided ', async () => {
-    const sut = new PostRouter()
-    const httpResponse = await sut.create(null)
-    expect(httpResponse.statusCode).toBe(400)
-  })
-  test('Should return ValidationError and status 400 if any invalid form params', async () => {
-    const sut = new PostRouter()
-    const httpRequest = {
-      params: {}
-    }
-    const httpResponse = await sut.create(httpRequest)
-    expect(httpResponse.statusCode).toBe(400)
-  })
-
-  test('Should return ValidationError and status 400 if there is a `invalid_tag`', async () => {
-    const sut = new PostRouter()
-    const httpRequest = {
-      params: {
-        title: 'any_title',
-        body: 'any_body, some_body',
-        tags: ['valid_tag_one', 'valid_tag_two', 'invalid_tag']
-      }
-    }
-    const httpResponse = await sut.create(httpRequest)
-    expect(httpResponse.statusCode).toBe(400)
-  })
-
-  test('Should return ValidationError and status 400 if there is a `invalid_tag`', async () => {
-    const sut = new PostRouter()
-    const httpRequest = {
-      params: {
-        title: 'any_title',
-        body: 'any_body, some_body',
-        tags: ['valid_tag_one', 'valid_tag_two', 'invalid_tag']
-      }
-    }
-    const httpResponse = await sut.create(httpRequest)
-    expect(httpResponse.statusCode).toBe(400)
-  })
-
-  test('Should return 201 if send valid request', async () => {
-    const sut = new PostRouter()
-    const httpRequest = {
-      title: 'any_title',
-      body: 'any_body, some_body',
-      tags: ['valid_tag_one', 'valid_tag_two', 'valid_tag_three']
-    }
-    const httpResponse = await sut.create(httpRequest)
-    expect(httpResponse.statusCode).toBe(201)
-  })
-})
 describe('Post Router - Ensure that the route `update` work correcly', () => {
   test('Should return 400 if no ID is provided ', async () => {
     const sut = new PostRouter()
@@ -237,9 +188,9 @@ describe('Post Router - Ensure that the route `update` work correcly', () => {
       HttpResponse.badRequest('id').statusCode
     )
   })
-  test.only('Should return status 404 if valid ID has not found', async () => {
+  test('Should return status 404 if valid ID has not found', async () => {
     const sut = new PostRouter()
-    const id = '3603928c-3785-4338-b5dd-447dca646b21';
+    const id = 'beeb8266-a4fa-4035-b3e7-9b13d6ada59f'
     const httpRequest = {
       title: 'any_title_if_400',
       body: 'any_body, some_body',
@@ -252,28 +203,121 @@ describe('Post Router - Ensure that the route `update` work correcly', () => {
   })
   test('Should return ValidationError and status 400 if there is a `invalid_tag`', async () => {
     const sut = new PostRouter()
-    const httpRequest = {
-      params: {
-        id: '3603928c-3785-4338-b5dd-447dca646b21',
-        title: 'any_title',
-        body: 'any_body, some_body',
-        tags: ['valid_tag_one', 'valid_tag_two', 'invalid_tag']
-      }
+    const id = '3603928c-3785-4338-b5dd-447dca646b21'
+    const body = {
+      title: 'any_title',
+      body: 'any_body, some_body',
+      tags: ['valid_tag_one', 'valid_tag_two', 'invalid_tag']
     }
-    const httpResponse = await sut.update(httpRequest.params.id, httpRequest)
+    const httpResponse = await sut.update(id, body)
     expect(httpResponse.statusCode).toBe(
       HttpResponse.badRequest('id').statusCode
     )
   })
   test('Should return 200 if send valid request', async () => {
     const sut = new PostRouter()
-    const id = '09bb1d8c-4965-4788-94f7-31b151eaba4e';
+    const id = '7f837785-7ac6-4d17-9bbc-dbcea5d6c8aa'
     const httpRequest = {
-      title: 'any_title',
+      title: 'any_title_name_modify',
       body: 'any_body, some_body',
       tags: ['valid_tag_one', 'valid_tag_two', 'valid_tag_three']
     }
     const httpResponse = await sut.update(id, httpRequest)
     expect(httpResponse.statusCode).toBe(200)
+  })
+})
+*/
+describe('Post Router - Ensure that the routes `create`, `update`, `remove`, `getByID`, `getAll` work correcly', () => {
+  let connection
+  let db
+  let mongoServer
+  let dataResult
+  beforeAll(async () => {
+    mongoServer = await MongoMemoryServer.create()
+    await MongoHelper.connect(mongoServer.getUri())
+    db = await MongoHelper.getCollection('posts')
+  })
+  afterAll(async () => {
+    await MongoHelper.disconnect()
+    if (connection) {
+      await mongoServer.stop()
+    }
+  })
+
+  beforeEach(async () => {
+    await db.deleteMany
+  })
+  test('Should return ValidationError and status 400 if any invalid form params, in route create', async () => {
+    const sut = new PostRouter()
+    const httpRequest = {
+      params: {}
+    }
+    const httpResponse = await sut.create(httpRequest)
+    expect(httpResponse.statusCode).toBe(400)
+  })
+
+  test('Should return ValidationError and status 400 if there is a `invalid_tag`, in route create', async () => {
+    const sut = new PostRouter()
+    const httpRequest = {
+      params: {
+        title: 'any_title',
+        body: 'any_body, some_body',
+        tags: ['valid_tag_one', 'valid_tag_two', 'invalid_tag']
+      }
+    }
+    const httpResponse = await sut.create(httpRequest)
+    expect(httpResponse.statusCode).toBe(400)
+  })
+
+  test('Should return ValidationError and status 400 if there is a `invalid_tag`, in route create', async () => {
+    const sut = new PostRouter()
+    const httpRequest = {
+      params: {
+        title: 'any_title',
+        body: 'any_body, some_body',
+        tags: ['valid_tag_one', 'valid_tag_two', 'invalid_tag']
+      }
+    }
+    const httpResponse = await sut.create(httpRequest)
+    expect(httpResponse.statusCode).toBe(400)
+  })
+
+  test('Should return 201 if send valid request, in route create', async () => {
+    const sut = new PostRouter()
+    const httpRequest = {
+      title: 'any_title',
+      body: 'any_body, some_body',
+      tags: ['valid_tag_one', 'valid_tag_two', 'valid_tag_three']
+    }
+    const httpResponse = await sut.create(httpRequest)
+    dataResult = httpResponse.data
+    expect(httpResponse.statusCode).toBe(201)
+  })
+
+  test('Should return 400 if no ID is provided, in route `getById`', async () => {
+    const sut = new PostRouter()
+    const httpResponse = await sut.getById(null)
+    expect(httpResponse.statusCode).toBe(400)
+  })
+  test('Should return 400 if ID is no valid UUID to version 4, in route getById', async () => {
+    const sut = new PostRouter()
+    const httpRequest = {
+      params: {
+        id: 'invalid_uuid'
+      }
+    }
+    const httpResponse = await sut.getById(httpRequest)
+    expect(httpResponse.statusCode).toBe(400)
+  })
+
+  test('Should return 404 if ID is valid and register not found, in route `getById`', async () => {
+    const sut = new PostRouter()
+    const httpRequest = {
+      params: {
+        id: '392df6dc-ff45-42eb-af76-828f4e1786da'
+      }
+    }
+    const httpResponse = await sut.getById(httpRequest.params.id)
+    expect(httpResponse.statusCode).toBe(404)
   })
 })

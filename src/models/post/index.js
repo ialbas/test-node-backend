@@ -3,6 +3,31 @@ const db = require('../database/mongodb-connection')
 const postSchema = require('./schema')
 const HttpResponse = require('../../helpers/http-response')
 
+const validateBody = (body) => {
+  const PostModel = db.model('Post', postSchema)
+  const clientPost = new PostModel(body)
+
+  if (!clientPost) {
+    return HttpResponse.serverError()
+  }
+
+  const error = clientPost.validateSync()
+
+  const result = {
+    isValid: true,
+    error: null,
+    client: PostModel
+  }
+
+  if (error) {
+    const { message } = error
+    result.isValid = false
+    result.error = HttpResponse.badRequestParam(message)
+  }
+
+  return result
+}
+
 class PostDB {
   constructor (httpResquest) {
     this.httpResquest = httpResquest
@@ -13,53 +38,61 @@ class PostDB {
     return PostUseCaseSpy(httpResquest.params.id);
   }
   */
-  async create (post) {
+  async create (body) {
     postSchema.options = { id: false }
     try {
-      if (post) {
-        const result = await post.save()
+      // verifica se o body é valido
+      const { error, isValid, client } = validateBody(body)
+      if (error) {
+        return error
+      }
+
+      if (isValid) {
+        const result = await client.create(body)
         return result
       }
+      return HttpResponse.badRequest()
     } catch (e) {
       console.error(e)
     }
   }
 
   async update (id, body) {
-    // postSchema.options = { id: false }
-
     try {
-      if (body) {
-        const find = await body.find({
-          _id: 'fa961eb2-b0aa-401d-a07a-7ca04d4bd1f3'
-        })
-        console.log(find)
-        const result = await body.update(body)
-        return result
+      const { error, isValid, client } = validateBody(body)
+      if (error) {
+        return error
       }
-    } catch (e) {
-      console.error(e)
-    }
-  }
-  /*
-    const Post = db.model('Post', postSchema)
-
-    const find = await Post.find({ _id: id })
-    console.log(find)
-    try {
-      if (!find) {
+      const find = await client.findOne({ _id: id })
+      if (isValid) {
+        if (find) {
+          const result = await client.update({ _id: id }, body)
+          if (result.acknowledged) {
+            return HttpResponse.ok(find)
+          }
+          return HttpResponse.badRequest('update Error')
+        }
         return HttpResponse.notFound('id')
       }
 
-      if (find) {
-        const result = await Post.updateOne(id, body)
-        return result
-      }
+      return HttpResponse.serverError()
     } catch (e) {
       console.error(e)
     }
   }
-  */
+
+  async getById (id) {
+    try {
+      const PostModel = db.model('Post', postSchema)
+      const find = await PostModel.findOne({ _id: id })
+      if (find) {
+        return HttpResponse.ok(find)
+      }
+      return HttpResponse.notFound('id')
+    } catch (e) {
+      console.error(e)
+    }
+  }
 }
 
 module.exports = PostDB

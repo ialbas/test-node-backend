@@ -1,29 +1,11 @@
+
 const validate = require('uuid-validate')
-const db = require('../../models/database/mongodb-connection')
+
 const PostDB = require('../../models/post/index')
 const HttpResponse = require('../../helpers/http-response')
 const PostUseCaseSpy = require('../../models/database/PostUseCaseSpy')
 const postSchema = require('../../models/post/schema')
-
-const validateBody = (body) => {
-  const PostModel = db.model('Post', postSchema)
-  const clientPost = new PostModel(body)
-  const error = clientPost.validateSync()
-
-  const result = {
-    isValid: true,
-    error: null,
-    client: clientPost
-  }
-
-  if (error) {
-    const { message } = error
-    result.isValid = false
-    result.error = HttpResponse.badRequestParam(message)
-  }
-
-  return result
-};
+const { response } = require('express')
 
 class PostRouter {
   /**
@@ -35,20 +17,19 @@ class PostRouter {
    */
   async create (body) {
     try {
-      const validator = validateBody(body)
-
-      if (validator.error) {
-        return validator.error
+      if (!body) {
+        return HttpResponse.badRequest()
       }
 
-      if (validator.isValid) {
+      if (body) {
         // producion db
         const model = new PostDB()
-        const result = await model.create(validator.client)
+        const result = await model.create(body)
+        if (!result) {
+          return HttpResponse.badRequest()
+        }
         return HttpResponse.created(result)
       }
-
-      return HttpResponse.serverError()
     } catch (error) {
       return HttpResponse.serverError()
     }
@@ -64,23 +45,20 @@ class PostRouter {
    */
   async update (id, body) {
     try {
+      // if id valid
       if (!validate(id, 4)) {
         return HttpResponse.badRequestParam('id')
       }
-      const validator = validateBody(body)
-
-      if (validator.error) {
-        return validator.error
-      }
-
-      if (validator.isValid) {
-        // producion model
+      // if body
+      if (body) {
         const model = new PostDB()
-        const result = await model.update(id, validator.client)
-        return HttpResponse.ok(result)
+        const result = await model.update(id, body)
+        if (result.statusCode === 200) {
+          return HttpResponse.ok(result)
+        } else {
+          return result
+        }
       }
-
-      return HttpResponse.serverError()
     } catch (error) {
       return HttpResponse.serverError()
     }
@@ -101,13 +79,13 @@ class PostRouter {
       if (!validate(id, 4)) {
         return HttpResponse.badRequest('id')
       }
-      const db = new PostUseCaseSpy()
-      const result = await db.getByIdPost(id)
+      const model = new PostDB()
+      const result = await await model.getById(id)
 
-      if (!result) {
-        return HttpResponse.notFound('Registro não encontrado.')
+      if (result.statusCode === 200) {
+        return HttpResponse.ok(result)
       }
-      return HttpResponse.ok(result)
+      return result
     } catch (error) {
       return HttpResponse.serverError()
     }
