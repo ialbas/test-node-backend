@@ -20,7 +20,6 @@ class PostRouter {
       if (!body) {
         return HttpResponse.badRequest()
       }
-
       if (body) {
         // producion db
         const model = new PostDB()
