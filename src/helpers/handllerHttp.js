@@ -30,7 +30,7 @@ class Handler {
   }
 
   async HandlerUpdate (req, res) {
-    const httpResponse = await PostController.update(req.body)
+    const httpResponse = await PostController.update(req.params.id, req.body)
     res.status(httpResponse.statusCode).json(httpResponse)
   }
 

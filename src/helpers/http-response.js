@@ -4,64 +4,64 @@ const UnsupportedParamError = require('./unsupported-param')
 module.exports = class HttpResponse {
   static serverError () {
     return {
-      name: 'internal server error',
       statusCode: 500,
+      description: 'internal server error',
       error: 'unexpected error'
     }
   }
 
   static notFound (paramName) {
     return {
-      name: 'not found',
       statusCode: 404,
+      description: 'not found',
       error: paramName
     }
   }
 
   static unauthorized (paramName) {
     return {
-      name: 'unauthorized',
       statusCode: 401,
+      description: 'unauthorized',
       error: paramName
     }
   }
 
   static badRequest (paramName) {
     return {
-      name: 'bad request',
       statusCode: 400,
+      description: 'bad request',
       error: new MissingParamError(paramName)
     }
   }
 
   static badRequestParam (paramName) {
     return {
-      name: 'bad request',
       statusCode: 400,
+      description: 'bad request',
       error: new UnsupportedParamError(paramName)
     }
   }
 
   static ok (data) {
     return {
-      name: 'ok',
       statusCode: 200,
+      description: 'ok',
       data
     }
   }
 
   static created (data) {
     return {
-      name: 'created',
       statusCode: 201,
+      description: 'created',
       data
     }
   }
 
   static noContent () {
     return {
-      name: 'no contet',
       statusCode: 204,
+      description: 'no contet',
       data: null
     }
   }

@@ -23,6 +23,7 @@ describe('Post Router - Ensure that the routes `create`, `update`, `remove`, `ge
 
   beforeEach(async () => {
     await db.deleteMany
+
     await db.insertMany([{
       title: 'Title one',
       body: 'Description body one',
@@ -96,6 +97,68 @@ describe('Post Router - Ensure that the routes `create`, `update`, `remove`, `ge
     expect(httpResponse.statusCode).toBe(201)
   })
 
+  test('Should return 400 if no ID is provided, in route `update`', async () => {
+    const sut = new PostRouter()
+    const httpRequest = {
+      title: 'any_title',
+      body: 'any_body, some_body',
+      tags: ['valid_tag_one', 'valid_tag_two', 'valid_tag_three']
+    }
+    const httpResponse = await sut.update(null, httpRequest)
+    expect(httpResponse.statusCode).toBe(400)
+  })
+  test('Should return 400 if ID is no valid UUID to version 4, in route `update`', async () => {
+    const sut = new PostRouter()
+    const httpRequest = {
+      title: 'any_title',
+      body: 'any_body, some_body',
+      tags: ['valid_tag_one', 'valid_tag_two', 'valid_tag_three']
+    }
+    const id = 'invalid_uuid'
+    const httpResponse = await sut.update(id, httpRequest)
+    expect(httpResponse.statusCode).toBe(400)
+  })
+  test('Should return status 400 if ID is valid UUID and any invalid form params, in route `update`', async () => {
+    const sut = new PostRouter()
+    const httpRequest = {}
+    const id = 'b0945cd6-71be-46cc-a5fc-e091888ec931'
+    const httpResponse = await sut.update(id, httpRequest)
+    expect(httpResponse.statusCode).toBe(400)
+  })
+  test('Should return status 404 if valid ID has not found, in route `update`', async () => {
+    const sut = new PostRouter()
+    const httpRequest = {
+      title: 'any_title',
+      body: 'any_body, some_body',
+      tags: ['valid_tag_one', 'valid_tag_two', 'valid_tag_three']
+    }
+    const id = '22ccc311-0b99-420c-823a-391038fbc1ea'
+    const httpResponse = await sut.update(id, httpRequest)
+    expect(httpResponse.statusCode).toBe(404)
+  })
+  test('Should return status 400 if valid ID has found and there is a `invalid_tag`, in route `update`', async () => {
+    const sut = new PostRouter()
+    const id = '0888b2c4-86c6-4f69-ad29-bb8a599e2e11'
+    const body = {
+      title: 'any_title',
+      body: 'any_body, some_body',
+      tags: ['valid_tag_one', 'valid_tag_two', 'invalid_tag']
+    }
+    const httpResponse = await sut.update(id, body)
+    expect(httpResponse.statusCode).toBe(400)
+  })
+  test('Should return 200 if send valid request, in route `update`', async () => {
+    const sut = new PostRouter()
+    const id = '7f837785-7ac6-4d17-9bbc-dbcea5d6c8aa'
+    const httpRequest = {
+      title: 'any_title_name_modify',
+      body: 'any_body, some_body',
+      tags: ['valid_tag_one', 'valid_tag_two', 'valid_tag_three']
+    }
+    const httpResponse = await sut.update(id, httpRequest)
+    expect(httpResponse.statusCode).toBe(200)
+  })
+
   test('Should return 400 if no ID is provided, in route `getById`', async () => {
     const sut = new PostRouter()
     const id = null
@@ -128,14 +191,14 @@ describe('Post Router - Ensure that the routes `create`, `update`, `remove`, `ge
     const httpResponse = await sut.getAll()
     expect(httpResponse.statusCode).toBe(500)
   })
-  test('Should return 400 if `page` is integer > 0, in route `getAll`', async () => {
+  test('Should return 400 if `size` is integer > 0 and `page is NaN`, in route `getAll`', async () => {
     const sut = new PostRouter()
     const page = 'any_number'
     const size = 5
     const httpResponse = await sut.getAll(page, size)
     expect(httpResponse.statusCode).toBe(400)
   })
-  test('Should return 400 if `size` is integer > 0, in route `getAll`', async () => {
+  test('Should return 400 if `page` is integer > 0 and `size is NaN`, in route `getAll`', async () => {
     const sut = new PostRouter()
     const page = 5
     const size = 'any_number'
@@ -144,8 +207,8 @@ describe('Post Router - Ensure that the routes `create`, `update`, `remove`, `ge
   })
   test('Should return 404 if not have register, in route `getAll`', async () => {
     const sut = new PostRouter()
-    const page = 5
-    const size = 5
+    const page = 300
+    const size = 3000
     const httpResponse = await sut.getAll(page, size)
     expect(httpResponse.statusCode).toBe(404)
   })
@@ -171,7 +234,7 @@ describe('Post Router - Ensure that the routes `create`, `update`, `remove`, `ge
 
   test('Should return 404 if ID is valid and register not found, in route `remove`', async () => {
     const sut = new PostRouter()
-    const id = '3603928c-3785-4338-b5dd-447dca646b21'
+    const id = '9fa146c2-3403-479c-a6de-c2c4b1642872'
     const httpResponse = await sut.remove(id)
     expect(httpResponse.statusCode).toBe(404)
   })

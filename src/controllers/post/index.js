@@ -3,9 +3,6 @@ const validate = require('uuid-validate')
 
 const PostDB = require('../../models/post/index')
 const HttpResponse = require('../../helpers/http-response')
-const PostUseCaseSpy = require('../../models/database/PostUseCaseSpy')
-const postSchema = require('../../models/post/schema')
-const { response } = require('express')
 
 class PostRouter {
   /**
@@ -53,7 +50,7 @@ class PostRouter {
         const model = new PostDB()
         const result = await model.update(id, body)
         if (result.statusCode === 200) {
-          return HttpResponse.ok(result)
+          return result
         } else {
           return result
         }
@@ -115,14 +112,10 @@ class PostRouter {
       if (!parseInt(size) > 0) {
         return HttpResponse.badRequest('size')
       }
-      const db = new PostUseCaseSpy()
-      const result = await db.getAllPost(parseInt(page), parseInt(size))
-      if (!result) {
-        return HttpResponse.notFound('Registro não encontrado.')
-      }
-      return HttpResponse.ok(result)
+      const db = new PostDB()
+      const result = await db.getAll(parseInt(page), parseInt(size))
+      return result
     } catch (error) {
-      console.error(error)
       return HttpResponse.serverError()
     }
   }
@@ -142,13 +135,9 @@ class PostRouter {
       if (!validate(id, 4)) {
         return HttpResponse.badRequest('id')
       }
-      const db = new PostUseCaseSpy()
-      const result = await db.getRomovePost(id)
-
-      if (!result) {
-        return HttpResponse.notFound('Registro não encontrado.')
-      }
-      return HttpResponse.noContent()
+      const db = new PostDB()
+      const result = await db.remove(id)
+      return result
     } catch (error) {
       return HttpResponse.serverError()
     }

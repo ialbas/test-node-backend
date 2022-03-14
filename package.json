@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node ./src/app.js",
     "local": "nodemon ./src/app.js",
-    "test": "jest --passWithNoTests --colors ",
+    "test": "jest --passWithNoTests --colors",
     "test:watch": "npm test -- --watch",
     "test:staged": "jest --passWithNoTests",
     "test:ci": "npm test --silent --coverage",
