@@ -1,9 +1,7 @@
-const postSchema = require('./schema')
-const db = require('../database/mongodb-connection')
+const PostModel = require('./model')
 const HttpResponse = require('../../helpers/http-response')
 
-const validateBody = (body) => {
-  const PostModel = db.model('Post', postSchema)
+const validateBody = async (body) => {
   const clientPost = new PostModel(body)
 
   if (!clientPost) {
@@ -15,7 +13,7 @@ const validateBody = (body) => {
   const result = {
     isValid: true,
     error: null,
-    client: PostModel
+    client: clientPost
   }
 
   if (error) {
@@ -25,6 +23,6 @@ const validateBody = (body) => {
   }
 
   return result
-}
+};
 
 module.exports = validateBody

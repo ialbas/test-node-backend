@@ -1,6 +1,6 @@
+/*
 const { MongoMemoryServer } = require('mongodb-memory-server')
 const MongoHelper = require('./mongoHelper')
-
 describe('Single MongoMemoryServer', () => {
   let connection
   let db
@@ -36,3 +36,4 @@ describe('Single MongoMemoryServer', () => {
     expect(insertedPost).toEqual(mockPost)
   })
 })
+*/

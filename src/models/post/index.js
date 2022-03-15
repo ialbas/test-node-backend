@@ -1,25 +1,33 @@
-
-const db = require('../database/mongodb-connection')
 const validateBody = require('../post/validation')
-const postSchema = require('./schema')
+const PostModel = require('./model')
 const HttpResponse = require('../../helpers/http-response')
+const { createConn } = require('../database/mongodb-memory-connection')
 
 class PostDB {
   constructor (httpResquest) {
     this.httpResquest = httpResquest
   }
 
+  async db () {
+    const db = await createConn('posts')
+    return db
+  }
+
   async create (body) {
-    postSchema.options = { id: false }
     try {
-      const { error, isValid, client } = validateBody(body)
+      const { error, isValid } = await validateBody(body)
       if (error) {
         return error
       }
       if (isValid) {
-        const result = await client.create(body)
+        const result = await PostModel.create(body)
 
-        return { _id: result._id, title: result.title, body: result.body, tags: result.tags }
+        return {
+          _id: result._id,
+          title: result.title,
+          body: result.body,
+          tags: result.tags
+        }
       }
       return HttpResponse.badRequest()
     } catch (e) {
@@ -29,16 +37,16 @@ class PostDB {
 
   async update (id, body) {
     try {
-      const { error, isValid, client } = validateBody(body)
+      const { error, isValid } = await validateBody(body)
       if (error) {
         return error
       }
-      const find = await client.findOne({ _id: id })
+      const find = await PostModel.findOne({ _id: id })
       if (isValid) {
         if (find) {
-          const result = await client.updateOne({ _id: id }, body)
+          const result = await PostModel.updateOne({ _id: id }, body)
           if (result.acknowledged) {
-            const newResult = await client.find({ _id: id }, body)
+            const newResult = await PostModel.find({ _id: id }, body)
 
             return HttpResponse.ok(newResult)
           }
@@ -55,7 +63,6 @@ class PostDB {
 
   async getById (id) {
     try {
-      const PostModel = db.model('Post', postSchema)
       const find = await PostModel.findOne({ _id: id })
       if (find) {
         return HttpResponse.ok(find)
@@ -68,7 +75,6 @@ class PostDB {
 
   async remove (id) {
     try {
-      const PostModel = db.model('Post', postSchema)
       const find = await PostModel.findOne({ _id: id })
       if (find) {
         const remove = await PostModel.deleteOne({ _id: id })
@@ -85,8 +91,6 @@ class PostDB {
 
   async getAll (page, size) {
     try {
-      const PostModel = db.model('Post', postSchema)
-
       const offset = size * (page - 1)
       const options = {
         sort: { date: -1 },
@@ -96,9 +100,13 @@ class PostDB {
         limit: size
       }
 
-      const result = await PostModel.paginate({}, options, async (_err, res) => {
-        return await res
-      })
+      const result = await PostModel.paginate(
+        {},
+        options,
+        async (_err, res) => {
+          return await res
+        }
+      )
       if (result.docs.length > 0) {
         return HttpResponse.ok(result)
       }

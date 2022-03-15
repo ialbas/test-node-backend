@@ -1,9 +1,8 @@
-const { Schema } = require('mongoose')
+const { Schema, model } = require('mongoose')
 const mongoosePaginate = require('mongoose-paginate')
 const uuid = require('uuid')
 
 const postSchema = new Schema({
-
   _id: { type: String, default: () => uuid.v4() },
   title: {
     type: String,
@@ -30,7 +29,6 @@ const postSchema = new Schema({
     },
     required: [true, "the field `tags` don't contain any of these words: "]
   }
-
 })
 
-module.exports = postSchema.plugin(mongoosePaginate)
+module.exports = model('Post', postSchema.plugin(mongoosePaginate))

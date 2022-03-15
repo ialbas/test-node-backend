@@ -1,4 +1,3 @@
-
 const validate = require('uuid-validate')
 
 const PostDB = require('../../models/post/index')
@@ -19,9 +18,9 @@ class PostRouter {
       }
       if (body) {
         // producion db
-        const model = new PostDB()
-        const result = await model.create(body)
-        if (!result) {
+        const business = new PostDB()
+        const result = await business.create(body)
+        if (result.statusCode === 400) {
           return HttpResponse.badRequest()
         }
         return HttpResponse.created(result)
@@ -41,7 +40,10 @@ class PostRouter {
    */
   async update (id, body) {
     try {
-      // if id valid
+      if (!id) {
+        return HttpResponse.badRequestParam('id')
+      }
+
       if (!validate(id, 4)) {
         return HttpResponse.badRequestParam('id')
       }
