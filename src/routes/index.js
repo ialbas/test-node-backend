@@ -1,6 +1,6 @@
 const express = require('express')
 const routes = express.Router()
-const HandlerHttp = require('../helpers/handllerHttp')
+const HandlerHttp = require('./handllerHttp')
 
 // Post Routes
 const {
@@ -9,15 +9,16 @@ const {
   HandlerRemove,
   HandlerCreate,
   HandlerUpdate,
-  HandlerLogin
+  HandlerLogin,
+  authTokenVerify
 } = new HandlerHttp()
 
 // Route Post
-routes.post('/api/posts', HandlerCreate)
-routes.get('/api/posts', HandlerGetAll)
-routes.get('/api/posts/:id', HandlerGetByID)
-routes.put('/api/posts/:id', HandlerUpdate)
-routes.delete('/api/posts/:id', HandlerRemove)
+routes.post('/api/posts', authTokenVerify, HandlerCreate)
+routes.get('/api/posts', authTokenVerify, HandlerGetAll)
+routes.get('/api/posts/:id', authTokenVerify, HandlerGetByID)
+routes.put('/api/posts/:id', authTokenVerify, HandlerUpdate)
+routes.delete('/api/posts/:id', authTokenVerify, HandlerRemove)
 
 // Route Auth
 routes.post('/api/auth/login', HandlerLogin)

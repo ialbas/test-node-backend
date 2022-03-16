@@ -1,8 +1,10 @@
-//const MissingParamError = require('../../helpers/missing-param-error')
+// const MissingParamError = require('../../helpers/missing-param-error')
+const EmailValidator = require('../../helpers/email-validator')
+const MissingParamError = require('../../helpers/missing-param-error')
 const TokenGenerator = require('../../helpers/token-generator')
 const AuthRouter = require('../auth/index')
 
-const ENV_SECRET = 'env_my_secret'
+const ENV_SECRET = 'my_secret_pass'
 
 const loadedCredencials = {
   _id: '3603928c-3785-4338-b5dd-447dca646b21',
@@ -86,13 +88,30 @@ describe('Auth Router - Ensure that the route `login` work correcly', () => {
     expect(auth.statusCode).toBe(401)
   })
 
+  test('Should return false if email is invalid', async () => {
+    const emailValidator = new EmailValidator()
+    const valid = emailValidator.isValid('invalid_email')
+    expect(valid).toBeFalsy()
+  })
+  test('Should return true if email is valid', async () => {
+    const user = await makeUsers()
+    const emailValidator = new EmailValidator()
+    const valid = emailValidator.isValid(user.email)
+    expect(valid).toBeTruthy()
+  })
+
+  test('Should throw if no email is provided', async () => {
+    const emailValidator = new EmailValidator()
+    expect(() => { emailValidator.isValid() }).toThrow(new MissingParamError('email'))
+  })
+
   test('Should return 200 if email and password are correcly', async () => {
     const { sut } = makeSut()
     const user = await makeUsers()
     const accessToken = await sut.auth(user.email, 'any_password')
     const tokenGenerator = new TokenGenerator(ENV_SECRET)
     const validToken = await tokenGenerator.generate(user._id)
-    expect(accessToken).not.toBeNull()
-    //expect(accessToken.data.accessToken).toBe(validToken)
+    expect(accessToken.statusCode).toBe(200)
+    expect(accessToken.data.accessToken).toEqual(validToken)
   })
 })

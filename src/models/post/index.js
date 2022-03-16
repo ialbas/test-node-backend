@@ -1,16 +1,10 @@
 const validateBody = require('../post/validation')
 const PostModel = require('./model')
 const HttpResponse = require('../../helpers/http-response')
-const { createConn } = require('../database/mongodb-memory-connection')
 
 class PostDB {
   constructor (httpResquest) {
     this.httpResquest = httpResquest
-  }
-
-  async db () {
-    const db = await createConn('posts')
-    return db
   }
 
   async create (body) {
@@ -21,7 +15,6 @@ class PostDB {
       }
       if (isValid) {
         const result = await PostModel.create(body)
-
         return {
           _id: result._id,
           title: result.title,
@@ -46,15 +39,13 @@ class PostDB {
         if (find) {
           const result = await PostModel.updateOne({ _id: id }, body)
           if (result.acknowledged) {
-            const newResult = await PostModel.find({ _id: id }, body)
-
-            return HttpResponse.ok(newResult)
+            const current = await PostModel.find({ _id: id }, body)
+            return HttpResponse.ok(current)
           }
           return HttpResponse.badRequest('update Error')
         }
         return HttpResponse.notFound('id')
       }
-
       return HttpResponse.serverError()
     } catch (e) {
       console.error(e)

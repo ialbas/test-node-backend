@@ -5,19 +5,18 @@ const { MongoMemoryServer } = require('mongodb-memory-server')
 
 let mongoServer
 
-const connect = async () => {
+const connect = async (testURI) => {
   mongoServer = await MongoMemoryServer.create()
-  const uri = mongoServer.getUri()
+  const uri = testURI ? mongoServer.getUri() : process.env.MONGO_STRING_CONNECTION
   const options = {
     useNewUrlParser: true,
     useUnifiedTopology: true
   }
   return await mongoose.connect(uri, options)
-};
+}
 
 const close = async () => {
   if (mongoServer) {
-    await mongoose.connection.dropDatabase()
     await mongoose.connection.close()
     await mongoServer.stop()
   }

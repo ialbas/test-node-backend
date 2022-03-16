@@ -12,8 +12,7 @@ const validateBody = async (body) => {
 
   const result = {
     isValid: true,
-    error: null,
-    client: clientPost
+    error: null
   }
 
   if (error) {
