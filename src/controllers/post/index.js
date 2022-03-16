@@ -71,14 +71,11 @@ class PostRouter {
    */
   async getById (id) {
     try {
-      if (!id) {
-        return HttpResponse.badRequest('id')
-      }
-      if (!validate(id, 4)) {
+      if (!id || !validate(id, 4)) {
         return HttpResponse.badRequest('id')
       }
       const model = new PostDB()
-      const result = await await model.getById(id)
+      const result = await model.getById(id)
 
       if (result.statusCode === 200) {
         return HttpResponse.ok(result)

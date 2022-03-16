@@ -5,6 +5,7 @@ const {
   clear
 } = require('../../models/database/mongodb-connection')
 const validate = require('uuid-validate')
+const ServerError = require('../../helpers/server-error')
 
 describe('Post Router - Ensure that the routes `create`, `update`, `remove`, `getByID`, `getAll` work correcly', () => {
   let dataResult
@@ -83,14 +84,14 @@ describe('Post Router - Ensure that the routes `create`, `update`, `remove`, `ge
       body: 'any_body, some_body',
       tags: ['valid_tag_one', 'valid_tag_two', 'valid_tag_three']
     }
-    const id = 'invalid_uuid'
+    const id = 'invalid_uuid';
     const httpResponse = await sut.update(id, httpRequest)
     expect(httpResponse.statusCode).toBe(400)
   })
   test('Should return status 400 if ID is valid UUID and any invalid form params, in route `update`', async () => {
     const sut = new PostRouter()
     const httpRequest = {}
-    const id = 'b0945cd6-71be-46cc-a5fc-e091888ec931'
+    const id = 'b0945cd6-71be-46cc-a5fc-e091888ec931';
     const httpResponse = await sut.update(id, httpRequest)
     expect(httpResponse.statusCode).toBe(400)
   })
@@ -101,13 +102,13 @@ describe('Post Router - Ensure that the routes `create`, `update`, `remove`, `ge
       body: 'any_body, some_body',
       tags: ['valid_tag_one', 'valid_tag_two', 'valid_tag_three']
     }
-    const id = '22ccc311-0b99-420c-823a-391038fbc1ea'
+    const id = '22ccc311-0b99-420c-823a-391038fbc1ea';
     const httpResponse = await sut.update(id, httpRequest)
     expect(httpResponse.statusCode).toBe(404)
   })
   test('Should return status 400 if valid ID has found and there is a `invalid_tag`, in route `update`', async () => {
     const sut = new PostRouter()
-    const id = '0888b2c4-86c6-4f69-ad29-bb8a599e2e11'
+    const id = '0888b2c4-86c6-4f69-ad29-bb8a599e2e11';
     const body = {
       title: 'any_title',
       body: 'any_body, some_body',
@@ -136,14 +137,14 @@ describe('Post Router - Ensure that the routes `create`, `update`, `remove`, `ge
   })
   test('Should return 400 if ID is no valid UUID to version 4, in route `getById`', async () => {
     const sut = new PostRouter()
-    const id = 'invalid_uuid'
+    const id = 'invalid_uuid';
     const httpResponse = await sut.getById(id)
     expect(httpResponse.statusCode).toBe(400)
   })
 
   test('Should return 404 if ID is valid and register not found, in route `getById`', async () => {
     const sut = new PostRouter()
-    const id = '392df6dc-ff45-42eb-af76-828f4e1786da'
+    const id = '392df6dc-ff45-42eb-af76-828f4e1786da';
     const httpResponse = await sut.getById(id)
     expect(httpResponse.statusCode).toBe(404)
   })
@@ -162,7 +163,7 @@ describe('Post Router - Ensure that the routes `create`, `update`, `remove`, `ge
   })
   test('Should return 400 if `size` is integer > 0 and `page is NaN`, in route `getAll`', async () => {
     const sut = new PostRouter()
-    const page = 'any_number'
+    const page = 'any_number';
     const size = 5
     const httpResponse = await sut.getAll(page, size)
     expect(httpResponse.statusCode).toBe(400)
@@ -170,7 +171,7 @@ describe('Post Router - Ensure that the routes `create`, `update`, `remove`, `ge
   test('Should return 400 if `page` is integer > 0 and `size is NaN`, in route `getAll`', async () => {
     const sut = new PostRouter()
     const page = 5
-    const size = 'any_number'
+    const size = 'any_number';
     const httpResponse = await sut.getAll(page, size)
     expect(httpResponse.statusCode).toBe(400)
   })
@@ -196,14 +197,14 @@ describe('Post Router - Ensure that the routes `create`, `update`, `remove`, `ge
   })
   test('Should return 400 if ID is no valid UUID to version 4, in route `remove`', async () => {
     const sut = new PostRouter()
-    const id = 'invalid_uuid'
+    const id = 'invalid_uuid';
     const httpResponse = await sut.remove(id)
     expect(httpResponse.statusCode).toBe(400)
   })
 
   test('Should return 404 if ID is valid and register not found, in route `remove`', async () => {
     const sut = new PostRouter()
-    const id = '9fa146c2-3403-479c-a6de-c2c4b1642872'
+    const id = '9fa146c2-3403-479c-a6de-c2c4b1642872';
     const httpResponse = await sut.remove(id)
     expect(httpResponse.statusCode).toBe(404)
   })
@@ -215,5 +216,11 @@ describe('Post Router - Ensure that the routes `create`, `update`, `remove`, `ge
       const httpResponse = await sut.remove(id)
       expect(httpResponse.statusCode).toBe(200)
     }
+  })
+
+  test('Should return 400 if no body is provided, in route `create`', async () => {
+    const sut = new PostRouter()
+    const httpResponse = await sut.create(null)
+    expect(httpResponse.statusCode).toBe(400)
   })
 })
