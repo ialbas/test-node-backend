@@ -99,10 +99,10 @@ class PostRouter {
       if (!page && !size) {
         return HttpResponse.serverError()
       }
-      if (!page) {
+      if (!page && size) {
         return HttpResponse.badRequest('page')
       }
-      if (!size) {
+      if (page && !size) {
         return HttpResponse.badRequest('size')
       }
       if (!parseInt(page) > 0) {
@@ -111,8 +111,12 @@ class PostRouter {
       if (!parseInt(size) > 0) {
         return HttpResponse.badRequest('size')
       }
-      const db = new PostDB()
-      const result = await db.getAll(parseInt(page), parseInt(size))
+      const model = new PostDB()
+      const result = await model.getAll(parseInt(page), parseInt(size))
+
+      if (result.statusCode === 200) {
+        return HttpResponse.ok(result)
+      }
       return result
     } catch (error) {
       return HttpResponse.serverError()
@@ -128,14 +132,15 @@ class PostRouter {
    */
   async remove (id) {
     try {
-      if (!id) {
+      if (!id || !validate(id, 4)) {
         return HttpResponse.badRequest('id')
       }
-      if (!validate(id, 4)) {
-        return HttpResponse.badRequest('id')
+      const model = new PostDB()
+      const result = await model.remove(id)
+
+      if (result.statusCode === 200) {
+        return HttpResponse.ok(result)
       }
-      const db = new PostDB()
-      const result = await db.remove(id)
       return result
     } catch (error) {
       return HttpResponse.serverError()

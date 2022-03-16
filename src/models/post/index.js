@@ -1,7 +1,6 @@
 const validateBody = require('../post/validation')
 const PostModel = require('./model')
 const HttpResponse = require('../../helpers/http-response')
-const ServerError = require('../../helpers/server-error')
 
 class PostDB {
   constructor (httpResquest) {
