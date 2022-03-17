@@ -3,5 +3,4 @@ coverage
 .husky
 .vscode
 globalConfig.json
-.env
 .env-local

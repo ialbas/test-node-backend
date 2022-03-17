@@ -22,3 +22,16 @@ describe('Ensure works of Encrypter', () => {
     expect(encrypter.compare(value)).rejects.toThrow(new MissingParamError('hash'))
   })
 })
+
+describe('Ensure works of TokenValidator', () => {
+  test('Should retrun MissinParam if no secret is provided', async () => {
+    const token = new TokenGenerator()
+    const promise = token.generate('any_id')
+    expect(promise).rejects.toThrow(new MissingParamError('secret'))
+  })
+  test('Should retrun MissinParam if no id is provided', async () => {
+    const token = new TokenGenerator()
+    const promise = token.generate()
+    expect(promise).rejects.toThrow(new MissingParamError('secret'))
+  })
+})
