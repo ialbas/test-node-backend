@@ -4,3 +4,4 @@ coverage
 .vscode
 globalConfig.json
 .env
+.env-local
