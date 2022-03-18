@@ -8,17 +8,16 @@
 
 ![Backend API Rest NodeJs, Jest, JWT](capa_test_node_api.png)
 
-## A simple project example with node, jest, jwt, mongoose and aouther resources.
+## A simple project example with Node, Jest, JWT, Mongoose and outher resources.
 
 ## Sumary
 
 - [Sumary](#Sumary)
-- [Description](#a-simple-project-example-with-node-and-test)
-- [Getting Started](#getting-started)
-- [Features](#features)
-- [Documentation](#documentation)
-- [Libraries and Packages](#libraries-and-packages)
-- [Licence](#licence)
+- [Getting Started](#Getting-Started)
+- [Features](#Features)
+- [Documentation](#Documentation)
+- [Libraries and Packages](#Libraries-and-Packages)
+- [Licence](#Licence)
 
 ## ▶️ Getting Started
 
@@ -27,9 +26,9 @@ Requeriments and Instructions
 1. Install packages with `npm install`
 2. To see Tests and Coverage `npm run tests`
 3. Initialize this server `npm run start`
-4. For data persistence set your string connection in file `.env` do like the example in file `.env-example`
-5. Initialize docker-compose: `docker-compose up -d ` for container MongoDB
-6. For `Postman` there are ![collections](https://github.com/ialbas/test-node-backend/blob/main/test_node-backend.postman_collection) with all routs and ![envioriments](https://github.com/ialbas/test-node-backend/blob/main/TEST_NODE_BACKEND.postman_environment.json) to apply in your postman console.
+4. For data persistence set your string connection in file `.env` do like the example in file `.env-local`
+5. Initialize docker-compose: `docker-compose up -d ` for container Docker MongoDB
+6. For `Postman` there are `collections` with all routes and `envioriments` to apply in your postman console. See more in folder ./postman
 
 ## 🔨 Features
 
@@ -72,4 +71,4 @@ See the documentation at https://documenter.getpostman.com/view/11001155/UVsPN4e
 
 # ⚖️ License
 
-MIT License
+MIT License Copyright (c) 2022
