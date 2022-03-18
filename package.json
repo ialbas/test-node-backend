@@ -2,25 +2,33 @@
   "name": "test-node-backend",
   "version": "1.0.0",
   "description": "A simple project example with node and test",
-  "main": "index.js",
+  "main": "./src/app.js",
   "scripts": {
     "start": "node ./src/app.js",
     "local": "nodemon ./src/app.js",
-    "test": "jest --passWithNoTests --colors --silent --verbose",
+    "test": "jest --passWithNoTests --colors",
+    "test:silent": "jest --passWithNoTests --colors --silent --verbose",
     "test:watch": "npm test -- --watch",
     "test:staged": "jest --passWithNoTests",
     "test:ci": "npm test --silent --coverage",
     "prepare": "husky install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ialbas/test-node-backend"
   },
   "standard": {
     "env": [
       "jest"
     ]
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "homepage": "",
+  "keywords": ["api", "rest", "mongoose", "jwt", "code clean", "solid", "tdd", "jest", "postman"],
+  "author": "Ialbas Junior",
+  "license": "Mit",
+  "bugs": {
+    "url": "https://github.com/ialbas/test-node-backend/issues"
+  },
+  "homepage": "https://github.com/ialbas",
   "dependencies": {
     "bcrypt": "^5.0.1",
     "body-parser": "^1.19.2",
