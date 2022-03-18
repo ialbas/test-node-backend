@@ -13,8 +13,8 @@ class PostDB {
       if (error) {
         return error
       }
+      const result = await PostModel.create(body)
       if (isValid) {
-        const result = await PostModel.create(body)
         return {
           _id: result._id,
           title: result.title,
@@ -22,7 +22,7 @@ class PostDB {
           tags: result.tags
         }
       }
-      return HttpResponse.badRequest()
+      return error
     } catch (e) {
       console.error(e)
     }

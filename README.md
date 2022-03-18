@@ -1,5 +1,4 @@
 [![Node.js CI](https://github.com/ialbas/test-node-backend/actions/workflows/node.js.yml/badge.svg)](https://github.com/ialbas/test-node-backend/actions/workflows/node.js.yml)
-[![Test](https://img.shields.io/badge/test-passing-green)](https://img.shields.io/github/languages/top/ialbas/test-node-backend?style=flat-square)
 [![javascript style guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com/)
 [![dependencies](https://img.shields.io/badge/dependencies-up-green)](https://standardjs.com/)
 [![licence](https://badgen.net/badge/license/MIT/blue)](https://opensource.org/licenses/MIT)
@@ -12,14 +11,14 @@
 
 ## Sumary
 
-- [Sumary](#Sumary)
-- [Getting Started](#Getting-Started)
-- [Features](#Features)
-- [Documentation](#Documentation)
-- [Libraries and Packages](#Libraries-and-Packages)
-- [Licence](#Licence)
+- [Sumary](#sumary)
+- [Getting Started](#▶️-getting-started)
+- [Features](#🔨features)
+- [Documentation](#📃documentation)
+- [Libraries and Packages](#✅libraries-and-packages)
+- [Licence](#⚖️license)
 
-## ▶️ Getting Started
+## ▶️Getting Started
 
 Requeriments and Instructions
 
@@ -30,45 +29,47 @@ Requeriments and Instructions
 5. Initialize docker-compose: `docker-compose up -d ` for container Docker MongoDB
 6. For `Postman` there are `collections` with all routes and `envioriments` to apply in your postman console. See more in folder ./postman
 
-## 🔨 Features
+## 🔨Features
 
-This API should allow to realize a basic CRUD with `mongodb` and to authenticate with JWT.
+This API allows running basic CRUD with `mongodb` and authenticating routes with JWT and also has some other features listed below:
 
-- All API responses must be in JSON format.
-- Pagination on the API for the listing of the posts
-- Unit testing for all Routes and Helpers using `Jest`.
+- Using some [Best Practices](https://stackoverflow.blog/2020/03/02/best-practices-for-rest-api-design/) for good Rest API design.
+- Using [pagination](https://www.npmjs.com/package/mongoose-paginate) on the API for the listing of the posts
+- Using Unit testing for all Routes and Helpers using `Jest`.
+- Using Integration testing for all Routes and Helpers using `Postman`.
+- Using [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html) for controll verersion in [Git Tag](https://git-scm.com/book/en/v2/Git-Basics-Tagging), has the ability to tag specific points in a repository’s history.
 - Full documentation for all routes, with `Postman Documentation` to public documentation and Integration Tests.
-- Use `Lint Staged`
-- Use `Husky` hooks to pre-commits and push to repository
-- Authenticated the routes using JWT
-- Process and validate body using `Mongose Validation`
-- Some principes `SOLID`
+- Using `Lint Staged`
+- Using `Husky` hooks to pre-commits and push to repository
+- Using JWT for Routes Authentication
+- Using `Mongose Validation` for Process and validate of body
+- Implementing some principes `SOLID`
 - Using GitHub Actions to CI deployment
 - Great tests coverage
-- Using `MongoDB` for storage data - in container `Docker / Docker-Compose`
+- Using `MongoDB` for local storage data in container `Docker` and `Docker-Compose` to manage containers
 
-## 📃 Documentation
+## 📃Documentation
 
-See the documentation at https://documenter.getpostman.com/view/11001155/UVsPN4e4 for more details.
+See the documentation at [Postman Documentation for Requests and Responses](https://documenter.getpostman.com/view/11001155/UVsPN4e4) for more details.
 
-## ✅ Libraries and Packages
+## ✅Libraries and Packages
 
-- Jest
-- Express
-- Git
-- NPM
-- Husky
-- Lint Staged
-- Eslint
-- Standard Javascript Style
-- Nodemon
-- Mongo Memory Server
-- Mongose
-- JWT
-- Postman
-- Github Actions
-- Docker
+- [Jest](https://jestjs.io/)
+- [Express](https://expressjs.com/)
+- [Git](https://git-scm.com/)
+- [NPM](https://www.npmjs.com/)
+- [Husky](https://github.com/typicode/husky)
+- [Lint Staged](https://github.com/okonet/lint-staged)
+- [Standard Javascript Style](https://standardjs.com/)
+- [Nodemon](https://github.com/remy/nodemon)
+- [Mongo Memory Server](https://github.com/nodkz/mongodb-memory-server)
+- [Mongose](https://mongoosejs.com/)
+- [MongoDb](https://www.mongodb.com/)
+- [JWT](https://jwt.io/)
+- [Postman](https://www.postman.com/)
+- [Github Actions](https://docs.github.com/pt/actions)
+- [Docker](https://docs.docker.com/get-started/)
 
-# ⚖️ License
+# ⚖️License
 
-MIT License Copyright (c) 2022
+[MIT License](https://github.com/ialbas/test-node-backend/blob/main/LICENSE.md) Copyright (c) 2022

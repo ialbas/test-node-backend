@@ -14,14 +14,14 @@ class PostRouter {
   async create (body) {
     try {
       if (!body) {
-        return HttpResponse.badRequest()
+        return HttpResponse.badRequest(body)
       }
       if (body) {
         // producion db
         const business = new PostDB()
         const result = await business.create(body)
         if (result.statusCode === 400) {
-          return HttpResponse.badRequest()
+          return result
         }
         return HttpResponse.created(result)
       }
@@ -47,15 +47,16 @@ class PostRouter {
       if (!validate(id, 4)) {
         return HttpResponse.badRequestParam('id')
       }
-      // if body
-      if (body) {
-        const model = new PostDB()
-        const result = await model.update(id, body)
-        if (result.statusCode === 200) {
-          return result
-        } else {
-          return result
-        }
+      if (!body) {
+        return HttpResponse.badRequest(body)
+      }
+
+      const model = new PostDB()
+      const result = await model.update(id, body)
+      if (result.statusCode === 200) {
+        return result
+      } else {
+        return result
       }
     } catch (error) {
       return HttpResponse.serverError()
