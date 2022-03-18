@@ -12,13 +12,13 @@
 ## Sumary
 
 - [Sumary](#sumary)
-- [Getting Started](#▶️-getting-started)
-- [Features](#🔨features)
-- [Documentation](#📃documentation)
-- [Libraries and Packages](#✅libraries-and-packages)
-- [Licence](#⚖️license)
+- [Getting Started](#getting-started)
+- [Features](#features)
+- [Documentation](#documentation)
+- [Libraries and Packages](#libraries-and-packages)
+- [Licence](#license)
 
-## ▶️Getting Started
+## Getting Started
 
 Requeriments and Instructions
 
@@ -29,7 +29,7 @@ Requeriments and Instructions
 5. Initialize docker-compose: `docker-compose up -d ` for container Docker MongoDB
 6. For `Postman` there are `collections` with all routes and `envioriments` to apply in your postman console. See more in folder ./postman
 
-## 🔨Features
+## Features
 
 This API allows running basic CRUD with `mongodb` and authenticating routes with JWT and also has some other features listed below:
 
@@ -48,11 +48,11 @@ This API allows running basic CRUD with `mongodb` and authenticating routes with
 - Great tests coverage
 - Using `MongoDB` for local storage data in container `Docker` and `Docker-Compose` to manage containers
 
-## 📃Documentation
+## Documentation
 
 See the documentation at [Postman Documentation for Requests and Responses](https://documenter.getpostman.com/view/11001155/UVsPN4e4) for more details.
 
-## ✅Libraries and Packages
+## Libraries and Packages
 
 - [Jest](https://jestjs.io/)
 - [Express](https://expressjs.com/)
@@ -70,6 +70,6 @@ See the documentation at [Postman Documentation for Requests and Responses](http
 - [Github Actions](https://docs.github.com/pt/actions)
 - [Docker](https://docs.docker.com/get-started/)
 
-# ⚖️License
+# License
 
 [MIT License](https://github.com/ialbas/test-node-backend/blob/main/LICENSE.md) Copyright (c) 2022
