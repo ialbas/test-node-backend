@@ -13,8 +13,8 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"//Using Postman v9.14.0",
-							"",
+							"// Using Postman v9.14.0",
+							"// This script set environment to access token.",							
 							"var jsonData = JSON.parse(responseBody);",
 							"var accessToken = jsonData[\"data\"][\"accessToken\"]",
 							"postman.setGlobalVariable(\"accessToken\", `Bearer ${accessToken}`);"
@@ -141,7 +141,8 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"//Using Postman v9.14.0",
+							"// Using Postman v9.14.0",
+							"// Set environment param _id",
 							"var jsonData = JSON.parse(responseBody);",
 							"",
 							"for(i in jsonData[\"data\"][\"data\"][\"docs\"]){",
