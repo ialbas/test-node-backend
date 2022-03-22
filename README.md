@@ -23,7 +23,7 @@
 Requeriments and Instructions
 
 1. Install packages with `npm install`
-2. To see Tests and Coverage `npm run test`. You can see the results also in [coverage](./coverage/lcov-report/index.html) in your browser.
+2. To see Tests and Coverage `npm run test`
 3. Initialize this server `npm run start`
 4. For data persistence set your string connection in file `.env` do like the example in file `.env-local`
 5. Initialize docker-compose: `docker-compose up -d ` for container Docker MongoDB
@@ -94,7 +94,7 @@ Response Body has correcly credentials
 }
 ```
 
-Response Body: incorrecly credentials`
+Response Body: incorrecly credentials
 
 ```bash
 {
@@ -107,7 +107,7 @@ Response Body: incorrecly credentials`
 ```
 
 - For all routes (getById, getAll, create, update and remove) it is necessary to send Bearer JWT, otherwise it will return `unauthorized`:
-  ⚠️Caution: for this example, we should send the word `Bearer` before JWT access token
+⚠️Caution: for this example, we should send the word `Bearer` before JWT access token
 
 ```bash
 {

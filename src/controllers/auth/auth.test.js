@@ -1,7 +1,7 @@
 // const MissingParamError = require('../../helpers/missing-param-error')
 const EmailValidator = require('../../helpers/email-validator')
 const MissingParamError = require('../../helpers/missing-param-error')
-const TokenGenerator = require('../../helpers/token-generator')
+const TokenHelper = require('../../helpers/token-helper')
 const AuthRouter = require('../auth/index')
 
 const ENV_SECRET = 'my_secret_pass'
@@ -20,16 +20,16 @@ class User {
     return null
   }
 }
-const makeTokenGenerator = () => {
-  class TokenGeneratorSpy {
+const makeTokenHelper = () => {
+  class TokenHelperSpy {
     async generate (userId) {
       this.userId = userId
       return this.accessToken
     }
   }
-  const tokenGeneratorSpy = new TokenGeneratorSpy()
-  tokenGeneratorSpy.accessToken = '3603928c-3785-4338-b5dd-447dca646b21'
-  return tokenGeneratorSpy
+
+  TokenHelperSpy.accessToken = '3603928c-3785-4338-b5dd-447dca646b21'
+  return TokenHelperSpy
 }
 const makeEncrypter = () => {
   class EncrypterSpy {
@@ -54,12 +54,12 @@ const makeSut = () => {
   const sut = new AuthRouter()
   const userCredencials = makeUsers()
   const encrypterSpy = makeEncrypter()
-  const tokenGeneratorSpy = makeTokenGenerator()
+  const TokenHelperSpy = makeTokenHelper()
   return {
     sut,
     userCredencials,
     encrypterSpy,
-    tokenGeneratorSpy
+    TokenHelperSpy
   }
 }
 
@@ -109,8 +109,8 @@ describe('Auth Router - Ensure that the route `login` work correcly', () => {
     const { sut } = makeSut()
     const user = await makeUsers()
     const accessToken = await sut.auth(user.email, 'any_password')
-    const tokenGenerator = new TokenGenerator(ENV_SECRET)
-    const validToken = await tokenGenerator.generate(user._id)
+    const tokenHelper = new TokenHelper(ENV_SECRET)
+    const validToken = await tokenHelper.generate(user._id)
     expect(accessToken.statusCode).toBe(200)
     expect(accessToken.data.accessToken).toEqual(validToken)
   })

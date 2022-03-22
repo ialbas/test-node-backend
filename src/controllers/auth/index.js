@@ -1,7 +1,7 @@
 require('dotenv').config()
 const HttpResponse = require('../../helpers/http-response')
 const Encripter = require('../../helpers/encrypter')
-const TokenGenerator = require('../../helpers/token-generator')
+const TokenHelper = require('../../helpers/token-helper')
 const User = require('../../models/user')
 
 class AuthRouter {
@@ -17,8 +17,8 @@ class AuthRouter {
     const encripter = new Encripter()
     const isValid = user && (await encripter.compare(password, user.password))
     if (isValid) {
-      const tokenGenerator = new TokenGenerator(process.env.TOKEN_SECRET)
-      const accessToken = await tokenGenerator.generate(user._id)
+      const tokenHelper = new TokenHelper(process.env.TOKEN_SECRET)
+      const accessToken = await tokenHelper.generate(user._id)
       return HttpResponse.ok({ accessToken: accessToken })
     }
     return HttpResponse.unauthorized('user unauthorized.')

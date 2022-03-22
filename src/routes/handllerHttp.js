@@ -1,6 +1,7 @@
 const Post = require('../controllers/post')
 const Auth = require('../controllers/auth')
 const HttpResponse = require('../helpers/http-response')
+const TokenHelper = require('../helpers/token-helper')
 const jwt = require('jsonwebtoken')
 
 // Post Routes
@@ -70,23 +71,23 @@ class Handler {
     try {
       const authorization = req.headers.authorization
       if (!authorization) {
-        res.status(401).json(HttpResponse.unauthorized('User unauthorized, jwt token is required.'))
+        res.status(401).json(HttpResponse.unauthorized('User unauthorized, jwt is required.'))
       } else {
         if (authorization) {
           const split = authorization.split('Bearer ')
+          const token = split[1]
           if (split.length !== 2) {
             res.status(401).json(HttpResponse.unauthorized('No Bearer or token is provided.'))
             return
           }
-          const token = split[1]
-          if (!token) {
-            res.status(401).json(HttpResponse.unauthorized('No token is provided.'))
+
+
+          const veify = await TokenHelper.tokenVerify(token, process.env.TOKEN_SECRET)
+          if (veify.err) {
+            return res.status(401).json(HttpResponse.unauthorized('Failed to authenticate token.'))
           }
-          jwt.verify(token, process.env.TOKEN_SECRET, (err, decoded) => {
-            if (err) return res.status(401).json(HttpResponse.unauthorized('Failed to authenticate token.'))
-            req.userId = decoded._id
-            next()
-          })
+          req.userId = veify.decoded._id
+          next()
         }
       }
     } catch (error) {
