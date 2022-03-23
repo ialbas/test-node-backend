@@ -17,13 +17,13 @@ module.exports = class TokenHelper {
     return jwt.sign({ _id: id }, this.secret, options)
   }
 
-  async tokenVerify (token, secret) {
-    const result = jwt.verify(token, secret, (err, decoded) => {
+  async tokenVerify (token) {
+    const result = jwt.verify(token, this.secret, (err, decoded) => {
       if (err) {
         return err
       }
       return decoded
     })
-    return await result
+    return result
   }
 }

@@ -2,7 +2,6 @@ const Post = require('../controllers/post')
 const Auth = require('../controllers/auth')
 const HttpResponse = require('../helpers/http-response')
 const TokenHelper = require('../helpers/token-helper')
-const jwt = require('jsonwebtoken')
 
 // Post Routes
 const PostController = new Post()
@@ -81,12 +80,12 @@ class Handler {
             return
           }
 
-
-          const veify = await TokenHelper.tokenVerify(token, process.env.TOKEN_SECRET)
-          if (veify.err) {
+          const tokenHElper = new TokenHelper(process.env.TOKEN_SECRET)
+          const verify = await tokenHElper.tokenVerify(token)
+          if (verify.err) {
+            req.userId = verify.decoded._id
             return res.status(401).json(HttpResponse.unauthorized('Failed to authenticate token.'))
           }
-          req.userId = veify.decoded._id
           next()
         }
       }

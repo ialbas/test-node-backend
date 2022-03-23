@@ -107,7 +107,7 @@ Response Body: incorrecly credentials
 ```
 
 - For all routes (getById, getAll, create, update and remove) it is necessary to send Bearer JWT, otherwise it will return `unauthorized`:
-⚠️Caution: for this example, we should send the word `Bearer` before JWT access token
+  ⚠️Caution: for this example, we should send the word `Bearer` before JWT access token
 
 ```bash
 {
@@ -121,14 +121,14 @@ Response Body: incorrecly credentials
 
 - Get By ID Route Example
 
-  ⚠️Caution: for this example, we used UUID in version 4
+  ⚠️Caution: for this example, for ID, we used UUID in version 4
 
 ```bash
 Request:
 
 GET /api/post/:id HTTP/1.1
 Host: localhost:3000
-Uri: localhost:3000/api/post/any_uuid
+Uri: localhost:3000/api/post/7ad8b353-98fb-41fb-85c7-dd83f26218f5
 Content-Type: application/json
 Authorization: "Bearer any_jwt_token"
 
@@ -156,18 +156,14 @@ Response Body has token credentials and UUID
     "statusCode": 200,
     "description": "ok",
     "data": {
-        "statusCode": 200,
-        "description": "ok",
-        "data": {
-            "_id": "any_uuid",
-            "title": "any_title",
-            "body": "any_body, some_body",
-            "tags": [
-                "valid_tag_one",
-                "valid_tag_two",
-                "valid_tag_three"
-            ]
-        }
+        "_id": "7ad8b353-98fb-41fb-85c7-dd83f26218f5",
+        "title": "get a text",
+        "body": "get a body",
+        "tags": [
+            "valid_tag_one",
+            "valid_tag_two",
+            "valid_tag_three"
+        ]
     }
 }
 ```
@@ -201,7 +197,7 @@ Request:
 
 GET /api/post/:id HTTP/1.1
 Host: localhost:3000
-Uri: localhost:3000/api/post/page=number&size=numeber
+Uri: localhost:3000/api/post/page=1&size=2
 Content-Type: application/json
 Authorization: "Bearer any_jwt_token"
 
@@ -229,25 +225,31 @@ Response Body has correcly token and parameters (page and size)
     "statusCode": 200,
     "description": "ok",
     "data": {
-        "statusCode": 200,
-        "description": "ok",
-        "data": {
-            "docs": [
-                {
-                    "_id": "407c8420-d95f-4107-b276-c0a5420a7bc1",
-                    "title": "any_title_name_modify",
-                    "body": "any_body, some_body",
-                    "tags": [
-                        "valid_tag_one",
-                        "valid_tag_two",
-                        "valid_tag_three"
-                    ]
-                }
-            ],
-            "total": 612,
-            "limit": 1,
-            "offset": 0
-        }
+        "docs": [
+            {
+                "_id": "7f837785-7ac6-4d17-9bbc-dbcea5d6c8aa",
+                "title": "any_title_name_modify",
+                "body": "any_body, some_body",
+                "tags": [
+                    "valid_tag_one",
+                    "valid_tag_two",
+                    "valid_tag_three"
+                ]
+            },
+            {
+                "_id": "78bddc02-94ce-4911-9aa5-d1903ef2a2b4",
+                "title": "any_title",
+                "body": "any_body, some_body",
+                "tags": [
+                    "valid_tag_one",
+                    "valid_tag_two",
+                    "valid_tag_three"
+                ]
+            }
+        ],
+        "total": 100,
+        "limit": 2,
+        "offset": 0
     }
 }
 ```
@@ -305,7 +307,7 @@ Request:
 
 DELETE /api/post/:id HTTP/1.1
 Host: localhost:3000
-Uri: localhost:3000/api/post/any_uuid
+Uri: localhost:3000/api/post/7ad8b353-98fb-41fb-85c7-dd83f26218f5
 Content-Type: application/json
 Authorization: "Bearer any_jwt_token"
 
@@ -333,11 +335,7 @@ Response Body has token credentials and UUID
     "statusCode": 200,
     "description": "ok",
     "data": {
-        "statusCode": 200,
-        "description": "ok",
-        "data": {
-            "deletedCount": 1
-        }
+        "deletedCount": 1
     }
 }
 ```

@@ -79,7 +79,7 @@ class PostRouter {
       const result = await model.getById(id)
 
       if (result.statusCode === 200) {
-        return HttpResponse.ok(result)
+        return result
       }
       return result
     } catch (error) {
@@ -116,7 +116,7 @@ class PostRouter {
       const result = await model.getAll(parseInt(page), parseInt(size))
 
       if (result.statusCode === 200) {
-        return HttpResponse.ok(result)
+        return result
       }
       return result
     } catch (error) {
@@ -140,7 +140,7 @@ class PostRouter {
       const result = await model.remove(id)
 
       if (result.statusCode === 200) {
-        return HttpResponse.ok(result)
+        return result
       }
       return result
     } catch (error) {
