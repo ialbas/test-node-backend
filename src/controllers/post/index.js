@@ -39,6 +39,9 @@ class PostRouter {
    * @returns {object} new a registrer {{ id: UUID, title: string, body: string, tags: string[] }}
    */
   async update (id, body) {
+    if (!body) {
+      return HttpResponse.badRequest(body)
+    }
     try {
       if (!id) {
         return HttpResponse.badRequestParam('id')
@@ -46,9 +49,6 @@ class PostRouter {
 
       if (!validate(id, 4)) {
         return HttpResponse.badRequestParam('id')
-      }
-      if (!body) {
-        return HttpResponse.badRequest(body)
       }
 
       const model = new PostDB()

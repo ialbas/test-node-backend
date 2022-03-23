@@ -22,6 +22,6 @@ const validateBody = async (body) => {
   }
 
   return result
-};
+}
 
 module.exports = validateBody

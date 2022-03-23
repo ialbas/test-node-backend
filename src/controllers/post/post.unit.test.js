@@ -20,9 +20,7 @@ describe('Post Router - Ensure that the routes `create`, `update`, `remove`, `ge
 
   test('Should return ValidationError and status 400 if any invalid form params, in route `create`', async () => {
     const sut = new PostRouter()
-    const httpRequest = {
-      params: {}
-    }
+    const httpRequest = {}
     const httpResponse = await sut.create(httpRequest)
     expect(httpResponse.statusCode).toBe(400)
   })
@@ -64,7 +62,12 @@ describe('Post Router - Ensure that the routes `create`, `update`, `remove`, `ge
     dataResult = httpResponse.data
     expect(httpResponse.statusCode).toBe(201)
   })
-
+  test('Should return ValidationError and status 400 if any invalid form params, in route `update`', async () => {
+    const sut = new PostRouter()
+    const httpRequest = {}
+    const httpResponse = await sut.update(httpRequest)
+    expect(httpResponse.statusCode).toBe(400)
+  })
   test('Should return 400 if no ID is provided, in route `update`', async () => {
     const sut = new PostRouter()
     const httpRequest = {
