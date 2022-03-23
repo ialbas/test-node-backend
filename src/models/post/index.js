@@ -22,7 +22,6 @@ class PostDB {
           tags: result.tags
         }
       }
-      return error
     } catch (e) {
       console.error(e)
     }
@@ -42,11 +41,9 @@ class PostDB {
             const current = await PostModel.find({ _id: id }, body)
             return HttpResponse.ok(current)
           }
-          return HttpResponse.badRequest('update Error')
         }
         return HttpResponse.notFound('id')
       }
-      return HttpResponse.serverError()
     } catch (e) {
       console.error(e)
     }

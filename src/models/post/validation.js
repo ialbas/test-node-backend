@@ -4,10 +4,6 @@ const HttpResponse = require('../../helpers/http-response')
 const validateBody = async (body) => {
   const clientPost = new PostModel(body)
 
-  if (!clientPost) {
-    return HttpResponse.serverError()
-  }
-
   const error = clientPost.validateSync()
 
   const result = {
