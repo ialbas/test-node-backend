@@ -83,10 +83,4 @@ describe('Mongodb URL connection', () => {
     expect(activeStringconnection).not.toBe(env.MONGO_STRING_CONNECTION)
     await close()
   })
-  test('Should mongodb-connection return correclly URL Connection', async () => {
-    await connect()
-    const activeStringconnection = await getUriConnected()
-    expect(activeStringconnection).toBe(env.MONGO_STRING_CONNECTION)
-    await close()
-  })
 })
