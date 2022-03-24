@@ -42,7 +42,37 @@ This API allows running basic CRUD with `mongodb` and authenticating routes with
 - Using `Lint Staged`
 - Using `Husky` hooks to pre-commits and push to repository
 - Using JWT for Routes Authentication
-- Using `Mongose Validation` for Process and validate of body
+- Using `Mongose Validation` for Process and validate of body, see below:
+
+```bash
+
+Schema: Post
+
+title: {
+    type: String,
+    minLength: 5,
+    maxLength: 30
+    required: true
+}
+
+body: {
+    type: String,
+    minLength: 10,
+    maxLength: 144
+    required: true
+}
+tags: {
+    type: [String],
+    values: [
+        'valid_tag_one',
+        'valid_tag_two',
+        'valid_tag_three',
+        'valid_tag_four',
+        'valid_tag_five'
+      ]
+}
+```
+
 - Implementing some principes `SOLID`
 - Using [GitHub Actions](https://github.com/ialbas/test-node-backend/actions) to CI deployment
 - Great tests coverage about 90%

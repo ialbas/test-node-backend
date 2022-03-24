@@ -23,7 +23,8 @@ const postSchema = new Schema({
         'valid_tag_one',
         'valid_tag_two',
         'valid_tag_three',
-        'valid_tag_four'
+        'valid_tag_four',
+        'valid_tag_five'
       ],
       message: 'the value `{VALUE}` is not supported.'
     },

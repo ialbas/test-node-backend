@@ -1,8 +1,7 @@
-// const MissingParamError = require('../../helpers/missing-param-error')
-const EmailValidator = require('../../helpers/email-validator')
-const MissingParamError = require('../../helpers/missing-param-error')
-const TokenHelper = require('../../helpers/token-helper')
-const AuthRouter = require('../auth/index')
+const EmailValidator = require('../../src/helpers/email-validator')
+const MissingParamError = require('../../src/helpers/missing-param-error')
+const TokenHelper = require('../../src/helpers/token-helper')
+const AuthRouter = require('../../src/controllers/auth/index')
 
 const ENV_SECRET = 'my_secret_pass'
 

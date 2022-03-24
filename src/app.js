@@ -1,17 +1,14 @@
-require('dotenv').config()
 const express = require('express')
-const bodyParser = require('body-parser')
 const cors = require('cors')
-const routes = require('../src/routes/index')
+
 const { connect } = require('./models/database/mongodb-connection')
+const routes = require('./routes')
 
 const app = express()
 
-app.use(bodyParser.json())
 app.use(cors())
 app.use(express.json())
-app.use(routes)
-
+routes(app)
 const MongoConnect = async () => await connect()
 MongoConnect()
 

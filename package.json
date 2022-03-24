@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node ./src/app.js",
     "local": "nodemon ./src/app.js",
-    "test": "jest --passWithNoTests --colors ",
+    "test": "jest --passWithNoTests --colors --runInBand --detectOpenHandles --no-cache --forceExit",
     "test:silent": "jest --passWithNoTests --colors --silent --verbose",
     "test:watch": "npm test -- --watch",
     "test:staged": "jest --passWithNoTests",
@@ -22,7 +22,17 @@
       "jest"
     ]
   },
-  "keywords": ["api", "rest", "mongoose", "jwt", "code clean", "solid", "tdd", "jest", "postman"],
+  "keywords": [
+    "api",
+    "rest",
+    "mongoose",
+    "jwt",
+    "code clean",
+    "solid",
+    "tdd",
+    "jest",
+    "postman"
+  ],
   "author": "Ialbas Junior",
   "license": "Mit",
   "bugs": {
@@ -35,6 +45,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
+    "fast-glob": "^3.2.11",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.2.2",
     "mongoose-paginate": "^5.0.3",
@@ -50,6 +61,7 @@
     "lint-staged": "^12.3.4",
     "mongodb-memory-server": "^7.3.6",
     "nodemon": "^2.0.15",
-    "standard": "^16.0.4"
+    "standard": "^16.0.4",
+    "supertest": "^6.2.2"
   }
 }

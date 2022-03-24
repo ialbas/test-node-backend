@@ -1,9 +1,9 @@
-const PostRouter = require('./index')
+const PostRouter = require('../../src/controllers/post/index')
 const {
   connect,
   close,
   clear
-} = require('../../models/database/mongodb-connection')
+} = require('../../src/models/database/mongodb-connection')
 const validate = require('uuid-validate')
 
 describe('Post Router - Ensure that the routes `create`, `update`, `remove`, `getByID`, `getAll` work correcly', () => {
@@ -11,11 +11,11 @@ describe('Post Router - Ensure that the routes `create`, `update`, `remove`, `ge
   beforeAll(async () => {
     await connect(true)
   })
-  afterAll(async () => {
-    await close()
-  })
   beforeAll(async () => {
     await clear()
+  })
+  afterAll(async () => {
+    await close()
   })
 
   test('Should return ValidationError and status 400 if any invalid form params, in route `create`', async () => {
@@ -28,11 +28,11 @@ describe('Post Router - Ensure that the routes `create`, `update`, `remove`, `ge
   test('Should return ValidationError and status 400 if there is a `invalid_tag`, in route `create`', async () => {
     const sut = new PostRouter()
     const httpRequest = {
-      params: {
-        title: 'any_title',
-        body: 'any_body, some_body',
-        tags: ['valid_tag_one', 'valid_tag_two', 'invalid_tag']
-      }
+
+      title: 'any_title',
+      body: 'any_body, some_body',
+      tags: ['valid_tag_one', 'valid_tag_two', 'invalid_tag']
+
     }
     const httpResponse = await sut.create(httpRequest)
     expect(httpResponse.statusCode).toBe(400)
@@ -41,14 +41,66 @@ describe('Post Router - Ensure that the routes `create`, `update`, `remove`, `ge
   test('Should return ValidationError and status 400 if there is a `invalid_tag`, in route `create`', async () => {
     const sut = new PostRouter()
     const httpRequest = {
-      params: {
-        title: 'any_title',
-        body: 'any_body, some_body',
-        tags: ['valid_tag_one', 'valid_tag_two', 'invalid_tag']
-      }
+
+      title: 'any_title',
+      body: 'any_body, some_body',
+      tags: ['valid_tag_one', 'valid_tag_two', 'invalid_tag']
+
     }
     const httpResponse = await sut.create(httpRequest)
     expect(httpResponse.statusCode).toBe(400)
+  })
+  test('Should return ValidationError and status 400 if there is a `title too short`, in route `create`', async () => {
+    const sut = new PostRouter()
+    const httpRequest = {
+
+      title: 'any',
+      body: 'body is normal size',
+      tags: ['valid_tag_one', 'valid_tag_two']
+
+    }
+    const httpResponse = await sut.create(httpRequest)
+    expect(httpResponse.statusCode).toBe(400)
+    expect(httpResponse.error.name).toContain('Unsupported param: Post validation failed: title: title too short')
+  })
+  test('Should return ValidationError and status 400 if there is a `title too long`, in route `create`', async () => {
+    const sut = new PostRouter()
+    const httpRequest = {
+
+      title: 'too long title too long title too long title too long title',
+      body: 'body is normal size',
+      tags: ['valid_tag_one', 'valid_tag_two']
+
+    }
+    const httpResponse = await sut.create(httpRequest)
+    expect(httpResponse.statusCode).toBe(400)
+    expect(httpResponse.error.name).toContain('Unsupported param: Post validation failed: title: title too long')
+  })
+  test('Should return ValidationError and status 400 if there is a `body too short`, in route `create`', async () => {
+    const sut = new PostRouter()
+    const httpRequest = {
+
+      title: 'title is normal size',
+      body: 'short',
+      tags: ['valid_tag_one', 'valid_tag_two']
+
+    }
+    const httpResponse = await sut.create(httpRequest)
+    expect(httpResponse.statusCode).toBe(400)
+    expect(httpResponse.error.name).toContain('Unsupported param: Post validation failed: body: body too short')
+  })
+  test('Should return ValidationError and status 400 if there is a `body too long`, in route `create`', async () => {
+    const sut = new PostRouter()
+    const httpRequest = {
+
+      title: 'title is normal size',
+      body: 'body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long',
+      tags: ['valid_tag_one', 'valid_tag_two']
+
+    }
+    const httpResponse = await sut.create(httpRequest)
+    expect(httpResponse.statusCode).toBe(400)
+    expect(httpResponse.error.name).toContain('Unsupported param: Post validation failed: body: body too long')
   })
 
   test('Should return 201 if send valid request, in route `create`', async () => {
@@ -61,6 +113,28 @@ describe('Post Router - Ensure that the routes `create`, `update`, `remove`, `ge
     const httpResponse = await sut.create(httpRequest)
     dataResult = httpResponse.data
     expect(httpResponse.statusCode).toBe(201)
+  })
+  test('Should return 201 if send valid request, in route `create` with validate tags: `valid_tag_one`, `valid_tag_two`, `valid_tag_three`, `valid_tag_four`, `valid_tag_five`.', async () => {
+    const sut = new PostRouter()
+    const httpRequest = {
+      title: 'any_title',
+      body: 'any_body, some_body',
+      tags: ['valid_tag_one', 'valid_tag_two', 'valid_tag_three', 'valid_tag_four', 'valid_tag_five']
+    }
+    const httpResponse = await sut.create(httpRequest)
+    dataResult = httpResponse.data
+    expect(httpResponse.statusCode).toBe(201)
+  })
+  test('Should return 400 if send valid request, in route `create` with validate tags: `valid_tag_one`, `valid_tag_two`, `valid_tag_three`, `valid_tag_four`, `valid_tag_five` and outher tag `valid_tag_six`.', async () => {
+    const sut = new PostRouter()
+    const httpRequest = {
+      title: 'any_title',
+      body: 'any_body, some_body',
+      tags: ['valid_tag_one', 'valid_tag_two', 'valid_tag_three', 'valid_tag_four', 'valid_tag_five', 'valid_tag_six']
+    }
+    const httpResponse = await sut.create(httpRequest)
+    expect(httpResponse.statusCode).toBe(400)
+    expect(httpResponse.error.name).toContain('Unsupported param: Post validation failed: tags.5: the value `valid_tag_six` is not supported.')
   })
   test('Should return ValidationError and status 400 if any invalid form params, in route `update`', async () => {
     const sut = new PostRouter()
@@ -118,6 +192,61 @@ describe('Post Router - Ensure that the routes `create`, `update`, `remove`, `ge
     const httpResponse = await sut.update(id, body)
     expect(httpResponse.statusCode).toBe(400)
   })
+  test('Should return ValidationError and status 400 if there is a `title too short`, in route `update`', async () => {
+    const sut = new PostRouter()
+    const body = {
+
+      title: 'any',
+      body: 'body is normal size',
+      tags: ['valid_tag_one', 'valid_tag_two']
+
+    }
+    const id = '0888b2c4-86c6-4f69-ad29-bb8a599e2e11'
+    const httpResponse = await sut.update(id, body)
+    expect(httpResponse.statusCode).toBe(400)
+    expect(httpResponse.error.name).toContain('Unsupported param: Post validation failed: title: title too short')
+  })
+  test('Should return ValidationError and status 400 if there is a `title too long`, in route `update`', async () => {
+    const sut = new PostRouter()
+    const body = {
+
+      title: 'too long title too long title too long title too long title',
+      body: 'body is normal size',
+      tags: ['valid_tag_one', 'valid_tag_two']
+
+    }
+    const id = '0888b2c4-86c6-4f69-ad29-bb8a599e2e11'
+    const httpResponse = await sut.update(id, body)
+    expect(httpResponse.statusCode).toBe(400)
+    expect(httpResponse.error.name).toContain('Unsupported param: Post validation failed: title: title too long')
+  })
+  test('Should return ValidationError and status 400 if there is a `body too short`, in route `update`', async () => {
+    const sut = new PostRouter()
+    const body = {
+
+      title: 'title is normal size',
+      body: 'short',
+      tags: ['valid_tag_one', 'valid_tag_two']
+
+    }
+    const id = '0888b2c4-86c6-4f69-ad29-bb8a599e2e11'
+    const httpResponse = await sut.update(id, body)
+    expect(httpResponse.statusCode).toBe(400)
+    expect(httpResponse.error.name).toContain('Unsupported param: Post validation failed: body: body too short')
+  })
+  test('Should return ValidationError and status 400 if there is a `body too long`, in route `update`', async () => {
+    const sut = new PostRouter()
+    const body = {
+
+      title: 'title is normal size',
+      body: 'body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long body too long',
+      tags: ['valid_tag_one', 'valid_tag_two']
+
+    }
+    const id = '0888b2c4-86c6-4f69-ad29-bb8a599e2e11'
+    const httpResponse = await sut.update(id, body)
+    expect(httpResponse.error.name).toContain('Unsupported param: Post validation failed: body: body too long')
+  })
   test('Should return 200 if send valid request, in route `update`', async () => {
     const sut = new PostRouter()
     const id = dataResult._id
@@ -129,7 +258,30 @@ describe('Post Router - Ensure that the routes `create`, `update`, `remove`, `ge
     const httpResponse = await sut.update(id, httpRequest)
     expect(httpResponse.statusCode).toBe(200)
   })
+  test('Should return 200 if send valid request, in route `update` with validate tags: `valid_tag_one`, `valid_tag_two`, `valid_tag_three`, `valid_tag_four`, `valid_tag_five`.', async () => {
+    const sut = new PostRouter()
+    const id = dataResult._id
+    const httpRequest = {
+      title: 'any_title',
+      body: 'any_body, some_body',
+      tags: ['valid_tag_one', 'valid_tag_two', 'valid_tag_three', 'valid_tag_four', 'valid_tag_five']
+    }
 
+    const httpResponse = await sut.update(id, httpRequest)
+    expect(httpResponse.statusCode).toBe(200)
+  })
+  test('Should return 400 if send valid request, in route `update` with validate tags: `valid_tag_one`, `valid_tag_two`, `valid_tag_three`, `valid_tag_four`, `valid_tag_five` and outher tag `valid_tag_six`.', async () => {
+    const sut = new PostRouter()
+    const id = dataResult._id
+    const httpRequest = {
+      title: 'any_title',
+      body: 'any_body, some_body',
+      tags: ['valid_tag_one', 'valid_tag_two', 'valid_tag_three', 'valid_tag_four', 'valid_tag_five', 'valid_tag_six']
+    }
+    const httpResponse = await sut.update(id, httpRequest)
+    expect(httpResponse.statusCode).toBe(400)
+    expect(httpResponse.error.name).toContain('Unsupported param: Post validation failed: tags.5: the value `valid_tag_six` is not supported.')
+  })
   test('Should return 400 if no ID is provided, in route `getById`', async () => {
     const sut = new PostRouter()
     const id = null

@@ -1,6 +1,6 @@
 module.exports = {
   collectCoverage: true,
-  collectCoverageFrom: ['**/src/**/*.js', '!src/app.js', '!src/routes/auth.js', '!src/routes/post.js', '!src/routes/index.js'],
+  collectCoverageFrom: ['**/src/**/*.js', '!src/app.js', '!src/routes/**.js'],
   coverageDirectory: 'coverage',
   coverageProvider: 'v8',
   testEnvironment: 'node',

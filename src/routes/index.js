@@ -1,26 +1,24 @@
-const express = require('express')
-const routes = express.Router()
-const HandlerHttp = require('./handllerHttp')
+const HandlerHttp = require('./handlerHttp')
 
-// Post Routes
-const {
-  HandlerGetByID,
-  HandlerGetAll,
-  HandlerRemove,
-  HandlerCreate,
-  HandlerUpdate,
-  HandlerLogin,
-  authTokenVerify
-} = new HandlerHttp()
+module.exports = (router) => {
+  // Post router
+  const {
+    HandlerGetByID,
+    HandlerGetAll,
+    HandlerRemove,
+    HandlerCreate,
+    HandlerUpdate,
+    HandlerLogin,
+    authTokenVerify
+  } = new HandlerHttp()
 
-// Route Post
-routes.post('/api/posts', authTokenVerify, HandlerCreate)
-routes.get('/api/posts', authTokenVerify, HandlerGetAll)
-routes.get('/api/posts/:id', authTokenVerify, HandlerGetByID)
-routes.put('/api/posts/:id', authTokenVerify, HandlerUpdate)
-routes.delete('/api/posts/:id', authTokenVerify, HandlerRemove)
+  // Route Post With Authorization
+  router.post('/api/posts', authTokenVerify, HandlerCreate)
+  router.get('/api/posts', authTokenVerify, HandlerGetAll)
+  router.get('/api/posts/:id', authTokenVerify, HandlerGetByID)
+  router.put('/api/posts/:id', authTokenVerify, HandlerUpdate)
+  router.delete('/api/posts/:id', authTokenVerify, HandlerRemove)
 
-// Route Auth
-routes.post('/api/auth/login', HandlerLogin)
-
-module.exports = routes
+  // Route Auth Open
+  router.post('/api/auth/login', HandlerLogin)
+}
