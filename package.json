@@ -10,7 +10,7 @@
     "test:silent": "jest --passWithNoTests --colors --silent --verbose",
     "test:watch": "npm test -- --watch",
     "test:staged": "jest --passWithNoTests",
-    "test:ci": "npm run test:silent --coverage --no-cache",
+    "test:ci": "npm run test:silent --coverage --no-cache --detectOpenHandles",
     "prepare": "husky install"
   },
   "repository": {

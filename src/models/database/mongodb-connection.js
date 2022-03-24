@@ -6,13 +6,11 @@ const { MongoMemoryServer } = require('mongodb-memory-server')
 
 let mongoServer
 let uriInUse
-let notUsed
 
 const connect = async (dbMemory) => {
   mongoServer = await MongoMemoryServer.create()
   mongoServer.getUri()
   uriInUse = dbMemory ? mongoServer.getUri() : process.env.MONGO_STRING_CONNECTION
-  notUsed = dbMemory ? process.env.MONGO_STRING_CONNECTION : mongoServer.getUri()
   const options = {
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -21,7 +19,7 @@ const connect = async (dbMemory) => {
 }
 const getUris = async () => {
   if (mongoServer) {
-    return { uriInUse, notUsed }
+    return uriInUse
   }
 }
 const close = async () => {

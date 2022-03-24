@@ -14,7 +14,6 @@
 - [Sumary](#sumary)
 - [Getting Started](#getting-started)
 - [Features](#features)
-- [Features Available Soon](#features-available-soon)
 - [Documentation](#documentation)
 - [Libraries and Packages](#libraries-and-packages)
 - [Licence](#license)
@@ -79,13 +78,6 @@ tags: {
 - Great tests coverage about 98%, including Post, some Helpers and Authentication
 - Using `MongoDB` for local storage data in container `Docker` and `Docker-Compose` to manage containers
 - Using [MongoDB Memory Server](https://github.com/nodkz/mongodb-memory-server) for integration Tests and Mock.
-
-## Features Available Soon
-
-- Create Users database, model, schema, validation and to implement Authorization
-- Using [Swagger](https://swagger.io/specification) API documentation with auto-generate documentation
-- Refactor Architecture to [Clean Code](https://github.com/ryanmcdermott/clean-code-javascript)
-- Implement testing for all possible features.
 
 ## Documentation
 

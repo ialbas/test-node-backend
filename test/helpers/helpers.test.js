@@ -77,16 +77,10 @@ describe('Ensure works of TokenValidator', () => {
   })
 })
 describe('Mongodb URL connection', () => {
-  test('Should mongodb-connection return return correctly URL Connection that be DB in Memory', async () => {
+  test('Should mongodb-connection return correctly URL Connection that be DB in Memory', async () => {
     await connect(true)
     const connectionStrings = await getUris()
-    expect(connectionStrings.uriInUse).not.toBe(env.MONGO_STRING_CONNECTION)
-    await close()
-  })
-  test('Should mongodb-connection return correctly URL Connection that NOT be DB in Memory', async () => {
-    await connect(false)
-    const connectionStrings = await getUris()
-    expect(connectionStrings.notUsed).not.toBe(env.MONGO_STRING_CONNECTION)
+    expect(connectionStrings).not.toBe(env.MONGO_STRING_CONNECTION)
     await close()
   })
 })
