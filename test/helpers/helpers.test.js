@@ -77,9 +77,6 @@ describe('Ensure works of TokenValidator', () => {
   })
 })
 describe('Mongodb URL connection', () => {
-  afterEach(async () => {
-    await close()
-  })
   test('Should mongodb-connection return correclly URL Connection', async () => {
     await connect(true)
     const activeStringconnection = await getUriConnected()
