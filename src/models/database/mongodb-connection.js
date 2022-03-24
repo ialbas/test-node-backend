@@ -5,20 +5,23 @@ const { MongoMemoryServer } = require('mongodb-memory-server')
 // get type of connection
 
 let mongoServer
-let connectedURI
-const connect = async (testURI) => {
+let uriInUse
+let notUsed
+
+const connect = async (dbMemory) => {
   mongoServer = await MongoMemoryServer.create()
-  const uri = testURI ? mongoServer.getUri() : process.env.MONGO_STRING_CONNECTION
-  connectedURI = uri
+  mongoServer.getUri()
+  uriInUse = dbMemory ? mongoServer.getUri() : process.env.MONGO_STRING_CONNECTION
+  notUsed = dbMemory ? process.env.MONGO_STRING_CONNECTION : mongoServer.getUri()
   const options = {
     useNewUrlParser: true,
     useUnifiedTopology: true
   }
-  return await mongoose.connect(uri, options)
+  return await mongoose.connect(uriInUse, options)
 }
-const getUriConnected = async () => {
+const getUris = async () => {
   if (mongoServer) {
-    return connectedURI
+    return { uriInUse, notUsed }
   }
 }
 const close = async () => {
@@ -42,5 +45,5 @@ module.exports = {
   connect,
   close,
   clear,
-  getUriConnected
+  getUris
 }
