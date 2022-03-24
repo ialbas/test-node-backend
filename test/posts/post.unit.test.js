@@ -5,6 +5,7 @@ const {
   clear
 } = require('../../src/models/database/mongodb-connection')
 const validate = require('uuid-validate')
+const ResourceNotFound = require('../../src/helpers/resource-not-found')
 
 describe('Post Router - Ensure that the routes `create`, `update`, `remove`, `getByID`, `getAll` work correcly', () => {
   let dataResult

@@ -14,6 +14,7 @@
 - [Sumary](#sumary)
 - [Getting Started](#getting-started)
 - [Features](#features)
+- [Features Available Soon](#features-available-soon)
 - [Documentation](#documentation)
 - [Libraries and Packages](#libraries-and-packages)
 - [Licence](#license)
@@ -73,10 +74,18 @@ tags: {
 }
 ```
 
-- Implementing some principes `SOLID`
+- Implementing some [S.O.L.I.D Principles](https://medium.com/backticks-tildes/the-s-o-l-i-d-principles-in-pictures-b34ce2f1e898)
 - Using [GitHub Actions](https://github.com/ialbas/test-node-backend/actions) to CI deployment
-- Great tests coverage about 90%
+- Great tests coverage about 98%, including Post, some Helpers and Authentication
 - Using `MongoDB` for local storage data in container `Docker` and `Docker-Compose` to manage containers
+- Using [MongoDB Memory Server](https://github.com/nodkz/mongodb-memory-server) for integration Tests and Mock.
+
+## Features Available Soon
+
+- Create Users database, model, schema, validation and to implement Authorization
+- Using [Swagger](https://swagger.io/specification) API documentation with auto-generate documentation
+- Refactor Architecture to [Clean Code](https://github.com/ryanmcdermott/clean-code-javascript)
+- Implement testing for all possible features.
 
 ## Documentation
 
@@ -446,7 +455,7 @@ Response Body has correcly credentials
 }
 ```
 
-⚠️Caution: for this example the params `title` and `body` are reruired.
+⚠️Caution: for this example the params `title` and `body` are required.
 
 Response Body if no `title` is provided:
 
@@ -520,7 +529,7 @@ Body:
 }
 ```
 
-⚠️Caution: For update we used the same validation for route create, but it's necessary send also the ID parameter.
+⚠️Caution: For update we used the same validation for route create, but it's necessary send also the parameter ID.
 
 Response Header:
 
@@ -557,7 +566,7 @@ Response Body has correcly credentials
 }
 ```
 
-⚠️Caution: for this example the params `title` and `body` are reruired.
+⚠️Caution: for this example the params `title` and `body` are required.
 
 Response Body if no `title` is provided:
 

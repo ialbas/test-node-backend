@@ -1,6 +1,15 @@
+require('dotenv').config()
 const Encrypter = require('../../src/helpers/encrypter')
 const TokenHelper = require('../../src/helpers/token-helper')
 const MissingParamError = require('../../src/helpers/missing-param-error')
+const {
+  connect,
+  getUriConnected,
+  close,
+  clear
+} = require('../../src/models/database/mongodb-connection')
+
+const env = process.env
 
 describe('Ensure works of Encrypter', () => {
   test('Should retrun MissinParam if no params is provided', async () => {
@@ -16,12 +25,8 @@ describe('Ensure works of Encrypter', () => {
   test('Should retrun MissinParam if no params is provided', async () => {
     const encrypter = new Encrypter()
 
-    expect(async () => {
-      await encrypter.compare()
-    }).rejects.toThrow(new MissingParamError('value'))
-    expect(async () => {
-      await encrypter.compare(null, 'any_hash')
-    }).rejects.toThrow(new MissingParamError('value'))
+    expect(encrypter.compare()).rejects.toThrow(new MissingParamError('value'))
+    expect(encrypter.compare('any_value')).rejects.toThrow(new MissingParamError('hash'))
   })
   test('Should retrun MissinParam in Encrypter if no params is provided', async () => {
     const encrypter = new Encrypter()
@@ -69,5 +74,15 @@ describe('Ensure works of TokenValidator', () => {
     const tk = new TokenHelper(secret)
     const verify = await tk.tokenVerify(accessToken, secret)
     expect(verify.name).toBe('JsonWebTokenError')
+  })
+})
+describe('Mongodb URL connection', () => {
+  afterEach(async () => {
+    await close()
+  })
+  test('Should mongodb-connection return correclly URL Connection', async () => {
+    await connect()
+    const activeStringconnection = await getUriConnected()
+    expect(activeStringconnection).toBe(env.MONGO_STRING_CONNECTION)
   })
 })

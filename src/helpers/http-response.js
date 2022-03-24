@@ -1,6 +1,7 @@
 const MissingParamError = require('./missing-param-error')
 const UnauthorizedError = require('./unauthorized-error')
 const UnsupportedParamError = require('./unsupported-param')
+const ResourceNotFound = require('./resource-not-found')
 const ServerError = require('./server-error')
 
 module.exports = class HttpResponse {
@@ -16,7 +17,7 @@ module.exports = class HttpResponse {
     return {
       statusCode: 404,
       description: 'not found',
-      error: paramName
+      error: new ResourceNotFound(paramName)
     }
   }
 
