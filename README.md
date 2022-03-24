@@ -188,7 +188,7 @@ keep-alive: timeout=5
 x-powered-by: Express
 ```
 
-Response Body has token credentials and UUID
+Response Body has token credentials and uuid
 
 ```bash
 {
@@ -219,13 +219,15 @@ Response Body if ID it's `NULL UUID`
 }
 ```
 
-Response Body if ID it's `NOT FOUND UUID`
+Response Body if ID it's `Not Found id`
 
 ```bash
 {
     "statusCode": 404,
     "description": "not found",
-    "error": "id"
+    "error": {
+        "name": "ResourceNotFound: id"
+    }
 }
 ```
 
@@ -317,13 +319,15 @@ Response Body if page null correcly or size `number`
 }
 ```
 
-Response Body if page or size `NOT FOUND`
+Response Body if page or size `Not Found`
 
 ```bash
 {
     "statusCode": 404,
     "description": "not found",
-    "error": "page or size"
+    "error": {
+        "name": "ResourceNotFound: page or size"
+    }
 }
 ```
 
@@ -367,7 +371,7 @@ keep-alive: timeout=5
 x-powered-by: Express
 ```
 
-Response Body has token credentials and UUID
+Response Body has token credentials and uuid
 
 ```bash
 {
@@ -379,7 +383,7 @@ Response Body has token credentials and UUID
 }
 ```
 
-Response Body if ID it's `NULL UUID`
+Response Body if ID it's `null uuid`
 
 ```bash
 {
@@ -391,13 +395,15 @@ Response Body if ID it's `NULL UUID`
 }
 ```
 
-Response Body if ID it's `NOT FOUND UUID`
+Response Body if ID it's `Not Found`
 
 ```bash
 {
     "statusCode": 404,
     "description": "not found",
-    "error": "id"
+    "error": {
+        "name": "ResourceNotFound: id"
+    }
 }
 ```
 
