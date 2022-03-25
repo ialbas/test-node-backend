@@ -9,7 +9,7 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 routes(app)
-const MongoConnect = async () => await connect()
+const MongoConnect = async () => await connect('env')
 MongoConnect()
 
 app.listen(process.env.PORT || 3000)
