@@ -47,7 +47,7 @@
     "express": "^4.17.3",
     "fast-glob": "^3.2.11",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^6.2.2",
+    "mongoose": "^6.4.6",
     "mongoose-paginate": "^5.0.3",
     "uuid": "^8.3.2",
     "uuid-validate": "^0.0.3",
